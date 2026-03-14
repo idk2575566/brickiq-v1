@@ -30,10 +30,18 @@ for (const viewport of [
     }
 
     await page.locator('#searchInput').fill('Star Wars');
-    await expect(page.locator('#setsTable tbody tr').first()).toBeVisible();
+    if (viewport.name === 'mobile') {
+      await expect(page.locator('#mobileCards .set-card').first()).toBeVisible();
+    } else {
+      await expect(page.locator('#setsTable tbody tr').first()).toBeVisible();
+    }
 
     await page.locator('#ownershipFilter').selectOption('owned');
-    await expect(page.locator('#setsTable tbody tr').first()).toBeVisible();
+    if (viewport.name === 'mobile') {
+      await expect(page.locator('#mobileCards .set-card').first()).toBeVisible();
+    } else {
+      await expect(page.locator('#setsTable tbody tr').first()).toBeVisible();
+    }
 
     await page.locator('#clearFiltersBtn').click();
     await expect(page.locator('#searchInput')).toHaveValue('');

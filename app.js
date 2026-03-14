@@ -372,25 +372,24 @@ function renderMobileCards(rows) {
     return;
   }
 
-  byId('mobileCards').innerHTML = rows.map((r) => `
-    <article class="set-card" data-detail="${r.setNumber}">
+  byId('mobileCards').innerHTML = rows.map((r) => {
+    const estNib = r.estimated.nib ? '<span class="est">est.</span>' : '';
+    return `
+    <article class="set-card" data-detail="${r.setNumber}" role="button" tabindex="0" aria-label="View details for ${r.name}">
       <div class="set-card-top">
-        <img class="set-thumb" loading="lazy" decoding="async" src="${imageUrlForSet(r.setNumber)}" alt="Set ${r.setNumber}" onerror="this.onerror=null;this.src='${placeholderImage(r.setNumber)}';" />
+        <img class="set-thumb" loading="lazy" decoding="async" src="${imageUrlForSet(r.setNumber)}" alt="${r.name} thumbnail" onerror="this.onerror=null;this.src='${placeholderImage(r.setNumber)}';" />
         <div class="set-card-head">
           <strong>${r.name}</strong>
-          <span>Set ${r.setNumber}</span>
-          <img class="theme-badge row-badge" loading="lazy" decoding="async" src="${themeBadgeDataUrl(r.theme, true)}" alt="${r.theme || 'Theme'} badge" />
+          <div class="market-price-line">
+            <label>Current market price</label>
+            <p>${GBP.format(r.nibPriceGbp)}${estNib}</p>
+          </div>
         </div>
-      </div>
-      <div class="set-card-grid">
-        <div><label>Status</label><p>${ownershipLabel(r)}</p></div>
-        <div><label>Qty</label><p>${r.qty}</p></div>
-        <div><label>NIB</label><p>${GBP.format(r.nibPriceGbp)}</p></div>
-        <div><label>Δ vs RRP</label><p class="${r.delta >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(r.delta)}</p></div>
       </div>
       ${actionButtons(r)}
     </article>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function updateFreshness() {
@@ -660,6 +659,14 @@ document.addEventListener('click', (e) => {
 
   const detail = e.target.closest('[data-detail]');
   if (detail) openDetail(detail.dataset.detail);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const card = e.target.closest('.set-card[data-detail]');
+  if (!card) return;
+  e.preventDefault();
+  openDetail(card.dataset.detail);
 });
 
 byId('detailClose').addEventListener('click', closeDetail);
