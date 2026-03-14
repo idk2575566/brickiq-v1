@@ -5,6 +5,8 @@ let state = {
   sortKey: 'marketValue',
   sortDir: 'desc',
   hasBrickEconomyData: false,
+  hasBrickLinkData: false,
+  marketSource: 'auto',
   search: '',
   filters: {
     ownership: 'all',
@@ -69,9 +71,33 @@ function extractBrickEconomy(row) {
   };
 }
 
+function extractBrickLink(row) {
+  const unit = toNumberOrNull(row.bricklinkAvgSoldGbp) ?? toNumberOrNull(row.bricklinkAvgSold);
+  if (unit == null) return { available: false, unit: null, total: null };
+  return {
+    available: true,
+    unit,
+    total: (toNumberOrNull(row.qty) || 0) * unit
+  };
+}
+
+function resolveMarket(be, bl) {
+  if (state.marketSource === 'brickeconomy') {
+    return be.available ? { unit: be.unit, total: be.total, source: 'BrickEconomy' } : { unit: null, total: null, source: 'BrickEconomy' };
+  }
+  if (state.marketSource === 'bricklink') {
+    return bl.available ? { unit: bl.unit, total: bl.total, source: 'BrickLink' } : { unit: null, total: null, source: 'BrickLink' };
+  }
+  if (be.available) return { unit: be.unit, total: be.total, source: 'BrickEconomy' };
+  if (bl.available) return { unit: bl.unit, total: bl.total, source: 'BrickLink' };
+  return { unit: null, total: null, source: null };
+}
+
 function valueRows(rows) {
   return rows.map((r) => {
     const be = extractBrickEconomy(r);
+    const bl = extractBrickLink(r);
+    const market = resolveMarket(be, bl);
     return {
       ...r,
       nibValue: r.qty * r.nibPriceGbp,
@@ -79,11 +105,15 @@ function valueRows(rows) {
       rrpValue: r.qty * r.rrpGbp,
       delta: r.qty * (r.nibPriceGbp - r.rrpGbp),
       hasBrickEconomy: be.available,
+      hasBrickLink: bl.available,
       brickEconomyUnitGbp: be.unit,
       brickEconomyValue: be.total,
       brickEconomySource: be.source,
-      marketUnit: be.available ? be.unit : null,
-      marketValue: be.available ? be.total : null
+      brickLinkUnitGbp: bl.unit,
+      brickLinkValue: bl.total,
+      marketSource: market.source,
+      marketUnit: market.unit,
+      marketValue: market.total
     };
   });
 }
@@ -376,9 +406,15 @@ function renderMobileControls(rows) {
 
   const beHint = byId('mobileBrickEconomyHint');
   if (beHint) {
-    beHint.textContent = state.hasBrickEconomyData
-      ? 'BrickEconomy sorting available'
-      : 'BrickEconomy unavailable in current snapshot';
+    if (state.hasBrickEconomyData && state.hasBrickLinkData) {
+      beHint.textContent = `Auto uses BrickEconomy first, then BrickLink pilot (${state.marketSource}).`;
+    } else if (state.hasBrickEconomyData) {
+      beHint.textContent = 'BrickEconomy steering available';
+    } else if (state.hasBrickLinkData) {
+      beHint.textContent = 'BrickLink pilot steering available';
+    } else {
+      beHint.textContent = 'No steering source available in current snapshot';
+    }
   }
 }
 
@@ -611,20 +647,20 @@ function openDetail(setNumber) {
         </div>
       </div>
       <div class="product-price">
-        <p class="main">${row.hasBrickEconomy ? GBP.format(row.brickEconomyValue) : '—'}</p>
-        <p class="sub">BrickEconomy market value · Qty ${row.qty}</p>
+        <p class="main">${row.marketValue != null ? GBP.format(row.marketValue) : '—'}</p>
+        <p class="sub">${row.marketSource || 'No source'} market value · Qty ${row.qty}</p>
       </div>
     </section>
 
     <section class="detail-grid">
       <div class="spec-tile"><label>Quantity</label><strong>${row.qty}</strong></div>
-      <div class="spec-tile"><label>Market unit (BrickEconomy)</label><strong>${row.hasBrickEconomy ? GBP.format(row.brickEconomyUnitGbp) : '—'}</strong></div>
+      <div class="spec-tile"><label>Market unit (${row.marketSource || 'n/a'})</label><strong>${row.marketUnit != null ? GBP.format(row.marketUnit) : '—'}</strong></div>
       <div class="spec-tile"><label>Used unit</label><strong>${GBP.format(row.usedPriceGbp)}</strong></div>
       <div class="spec-tile"><label>RRP unit</label><strong>${GBP.format(row.rrpGbp)}</strong></div>
-      <div class="spec-tile"><label>Market value (BrickEconomy)</label><strong>${row.hasBrickEconomy ? GBP.format(row.brickEconomyValue) : '—'}</strong></div>
+      <div class="spec-tile"><label>Market value (${row.marketSource || 'n/a'})</label><strong>${row.marketValue != null ? GBP.format(row.marketValue) : '—'}</strong></div>
       <div class="spec-tile"><label>Delta vs RRP</label><strong class="${row.delta >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(row.delta)}</strong></div>
     </section>
-    ${!state.hasBrickEconomyData ? '<p class="detail-note">BrickEconomy values are not present in the current data export.</p>' : ''}
+    ${!state.hasBrickEconomyData && !state.hasBrickLinkData ? '<p class="detail-note">No external market steering values are present in the current data export.</p>' : ''}
   `;
   byId('detailWatchBtn').textContent = isWatchlisted(setNumber) ? 'Remove from Watchlist' : 'Add to Watchlist';
   byId('detailDialog').showModal();
@@ -653,6 +689,7 @@ function clearFilters() {
   byId('ownershipFilter').value = 'all';
   byId('confidenceFilter').value = 'all';
   byId('valueBandFilter').value = 'all';
+  byId('marketSourceFilter').value = state.marketSource;
   reRender();
 }
 
@@ -665,13 +702,23 @@ async function loadData() {
     state.assumptions = data.assumptions;
     state.rows = valueRows(data.items);
     state.hasBrickEconomyData = state.rows.some((r) => r.hasBrickEconomy);
+    state.hasBrickLinkData = state.rows.some((r) => r.hasBrickLink);
 
     const assumptionBadge = byId('assumptionBadge');
     if (assumptionBadge) {
-      assumptionBadge.textContent = state.hasBrickEconomyData
-        ? 'BrickEconomy values available on supported rows.'
-        : 'BrickEconomy values not available in this snapshot.';
+      if (state.hasBrickEconomyData && state.hasBrickLinkData) {
+        assumptionBadge.textContent = 'BrickEconomy + BrickLink steering available.';
+      } else if (state.hasBrickEconomyData) {
+        assumptionBadge.textContent = 'BrickEconomy values available on supported rows.';
+      } else if (state.hasBrickLinkData) {
+        assumptionBadge.textContent = 'BrickLink steering values available on pilot rows.';
+      } else {
+        assumptionBadge.textContent = 'No external steering values in this snapshot.';
+      }
     }
+
+    const marketSourceFilter = byId('marketSourceFilter');
+    if (marketSourceFilter) marketSourceFilter.value = state.marketSource;
 
     updateFreshness();
     reRender();
@@ -708,6 +755,13 @@ byId('valueBandFilter').addEventListener('change', (e) => {
 });
 
 byId('clearFiltersBtn').addEventListener('click', clearFilters);
+
+byId('marketSourceFilter')?.addEventListener('change', (e) => {
+  state.marketSource = e.target.value || 'auto';
+  state.rows = valueRows(state.rows);
+  resetPage();
+  reRender();
+});
 
 byId('mobileOwnershipFilter')?.addEventListener('change', (e) => {
   state.filters.ownership = e.target.value;

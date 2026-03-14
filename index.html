@@ -83,6 +83,11 @@
           <option value="mid">£200 to £1000</option>
           <option value="high">Over £1000</option>
         </select>
+        <select id="marketSourceFilter">
+          <option value="auto">Market source: Auto</option>
+          <option value="brickeconomy">Market source: BrickEconomy</option>
+          <option value="bricklink">Market source: BrickLink pilot</option>
+        </select>
         <button id="clearFiltersBtn" class="chip-btn">Clear all</button>
       </section>
 
@@ -123,6 +128,7 @@
                 <option value="name:asc">Sort: Name A → Z</option>
                 <option value="name:desc">Sort: Name Z → A</option>
                 <option value="brickEconomyValue:desc">Sort: BrickEconomy high → low</option>
+                <option value="brickLinkValue:desc">Sort: BrickLink pilot high → low</option>
               </select>
               <select id="mobileThemeFilter">
                 <option value="all">All themes</option>

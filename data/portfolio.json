@@ -47,7 +47,12 @@
       "brickeconomyValue": null,
       "brickeconomyCurrency": null,
       "brickeconomyUrl": null,
-      "brickeconomyUpdatedAt": null
+      "brickeconomyUpdatedAt": null,
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "8583",
@@ -82,7 +87,12 @@
       "brickeconomyValue": 160,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/7877-1/lego-star-wars-naboo-starfighter",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.965Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.965Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "8584",
@@ -117,7 +127,12 @@
       "brickeconomyValue": 235,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/7879-1/lego-star-wars-hoth-echo-base",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "8318",
@@ -152,7 +167,12 @@
       "brickeconomyValue": 110,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/7913-1/lego-star-wars-the-clone-wars-clone-trooper-battle-pack",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "8585",
@@ -187,7 +207,12 @@
       "brickeconomyValue": 80,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/7956-1/lego-star-wars-ewok-attack",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "8592",
@@ -222,7 +247,12 @@
       "brickeconomyValue": 275,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/7965-1/lego-star-wars-millennium-falcon",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "7208",
@@ -257,7 +287,12 @@
       "brickeconomyValue": 40,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/8083-1/lego-star-wars-rebel-trooper-battle-pack",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "7206",
@@ -292,7 +327,12 @@
       "brickeconomyValue": 35,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/8084-1/lego-star-wars-snowtrooper-battle-pack",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "8883",
@@ -327,7 +367,12 @@
       "brickeconomyValue": 145,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/9488-1/elite-clone-trooper-commando-droid-battle-pack",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "8885",
@@ -362,7 +407,12 @@
       "brickeconomyValue": 40,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/9489-1/star-wars-endor-rebel-trooper-imperial-trooper-battle-pack",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "8887",
@@ -397,7 +447,12 @@
       "brickeconomyValue": 55,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/9490-1/lego-star-wars-droid-escape",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "8882",
@@ -432,7 +487,12 @@
       "brickeconomyValue": 130,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/9493-1/lego-star-wars-x-wing-starfighter",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "9204",
@@ -467,7 +527,12 @@
       "brickeconomyValue": 175,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/9498-1/lego-star-wars-the-clone-wars-saesee-tiins-jedi-starfighter",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "9208",
@@ -502,7 +567,12 @@
       "brickeconomyValue": 80,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/9509-1/lego-star-wars-advent-calendar",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "9201",
@@ -537,7 +607,12 @@
       "brickeconomyValue": 630,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/9515-1/lego-star-wars-the-clone-wars-malevolence",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "9266",
@@ -572,7 +647,12 @@
       "brickeconomyValue": 645,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/9526-1/lego-star-wars-palpatines-arrest",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "6522",
@@ -607,7 +687,12 @@
       "brickeconomyValue": 970,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/10188-1/lego-star-wars-death-star",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "8075",
@@ -642,7 +727,12 @@
       "brickeconomyValue": 395,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/10215-1/lego-star-wars-obi-wans-jedi-starfighter",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "9286",
@@ -677,7 +767,12 @@
       "brickeconomyValue": 225,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/10225-1/lego-star-wars-r2-d2",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "22807",
@@ -712,7 +807,12 @@
       "brickeconomyValue": 855,
       "brickeconomyCurrency": "USD",
       "brickeconomyUrl": "https://www.brickeconomy.com/set/10236-1/lego-star-wars-ewok-village",
-      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z",
+      "bricklinkAvgSold": null,
+      "bricklinkCurrency": null,
+      "bricklinkSampleSize": null,
+      "bricklinkWindow": null,
+      "bricklinkUpdatedAt": null
     },
     {
       "setId": "22758",
@@ -24268,6 +24368,164 @@
         ],
         "usedFallbackTimeout": false,
         "timeoutUsedMs": 20000
+      }
+    ]
+  },
+  "bricklinkPilot": {
+    "attemptedUniqueSets": 20,
+    "attemptedFromIndex": 0,
+    "missingOnly": true,
+    "requestDelayMs": 3500,
+    "fetchTimeoutMs": 25000,
+    "generatedAt": "2026-03-14T14:53:14.314Z",
+    "methodology": "Price Guide (catalogPG) > Last 6 Months Sales > New > Avg Price",
+    "valuationWindow": "Last 6 Months Sales",
+    "robotsUrl": "https://www.bricklink.com/robots.txt",
+    "fxBase": "GBP",
+    "fxUpdatedAt": "Sat, 14 Mar 2026 00:02:32 +0000",
+    "enrichedSets": 0,
+    "missingSets": 20,
+    "enrichedItems": 0,
+    "bySet": [
+      {
+        "setNumber": "6866-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=6866&ColorID=0",
+        "tried": "6866"
+      },
+      {
+        "setNumber": "7877-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=7877&ColorID=0",
+        "tried": "7877"
+      },
+      {
+        "setNumber": "7879-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=7879&ColorID=0",
+        "tried": "7879"
+      },
+      {
+        "setNumber": "7913-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=7913&ColorID=0",
+        "tried": "7913"
+      },
+      {
+        "setNumber": "7956-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=7956&ColorID=0",
+        "tried": "7956"
+      },
+      {
+        "setNumber": "7965-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=7965&ColorID=0",
+        "tried": "7965"
+      },
+      {
+        "setNumber": "8083-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=8083&ColorID=0",
+        "tried": "8083"
+      },
+      {
+        "setNumber": "8084-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=8084&ColorID=0",
+        "tried": "8084"
+      },
+      {
+        "setNumber": "9488-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=9488&ColorID=0",
+        "tried": "9488"
+      },
+      {
+        "setNumber": "9489-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=9489&ColorID=0",
+        "tried": "9489"
+      },
+      {
+        "setNumber": "9490-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=9490&ColorID=0",
+        "tried": "9490"
+      },
+      {
+        "setNumber": "9493-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=9493&ColorID=0",
+        "tried": "9493"
+      },
+      {
+        "setNumber": "9498-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=9498&ColorID=0",
+        "tried": "9498"
+      },
+      {
+        "setNumber": "9509-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=9509&ColorID=0",
+        "tried": "9509"
+      },
+      {
+        "setNumber": "9515-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=9515&ColorID=0",
+        "tried": "9515"
+      },
+      {
+        "setNumber": "9526-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=9526&ColorID=0",
+        "tried": "9526"
+      },
+      {
+        "setNumber": "10188-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=10188&ColorID=0",
+        "tried": "10188"
+      },
+      {
+        "setNumber": "10215-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=10215&ColorID=0",
+        "tried": "10215"
+      },
+      {
+        "setNumber": "10225-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=10225&ColorID=0",
+        "tried": "10225"
+      },
+      {
+        "setNumber": "10236-1",
+        "found": false,
+        "reason": "last-6-months-sales-section-missing",
+        "url": "https://www.bricklink.com/catalogPG.asp?S=10236&ColorID=0",
+        "tried": "10236"
       }
     ]
   }
