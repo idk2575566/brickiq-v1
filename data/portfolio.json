@@ -24156,829 +24156,118 @@
     }
   ],
   "brickeconomyPilot": {
-    "attemptedUniqueSets": 120,
+    "attemptedUniqueSets": 8,
     "attemptedFromIndex": 0,
-    "remainingOnly": true,
-    "requestDelayMs": 900,
+    "missingOnly": true,
+    "requestDelayMs": 4000,
     "robotsUrl": "https://www.brickeconomy.com/robots.txt",
-    "generatedAt": "2026-03-14T14:11:03.291Z",
-    "enrichedItems": 96,
-    "missingItems": 24,
+    "generatedAt": "2026-03-14T14:39:22.042Z",
+    "enrichedItems": 0,
+    "missingItems": 8,
+    "fetchTimeoutMs": 20000,
+    "fetchTimeoutFallbackMs": 35000,
+    "consecutiveFailureThreshold": 3,
+    "cooldownBaseMs": 15000,
+    "cooldownMaxMs": 120000,
+    "earlyStopConsecutiveFailures": 8,
+    "blockedPatternDetected": true,
+    "haltedEarly": true,
     "bySet": [
       {
         "setNumber": "6866-1",
         "found": false,
-        "reason": "HTTP 403 for https://www.brickeconomy.com/search.ashx?query=6866-1"
-      },
-      {
-        "setNumber": "10237-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10237-1/lego-the-lord-of-the-rings-the-two-towers-tower-of-orthanc",
-        "brickeconomyValue": 1300,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "10266-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10266-1/lego-nasa-apollo-11-lunar-lander",
-        "brickeconomyValue": 120,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "10289-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10289-1/lego-botanical-collection-bird-of-paradise",
-        "brickeconomyValue": 240,
-        "brickeconomyCurrency": "USD"
+        "reason": "HTTP 403 for https://www.brickeconomy.com/search.ashx?query=6866-1",
+        "status": 403,
+        "timeout": false
       },
       {
         "setNumber": "10302-1",
         "found": false,
         "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/10302-1/lego-transformers-optimus-prime"
-      },
-      {
-        "setNumber": "10305-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10305-1/lego-lion-knights-castle",
-        "brickeconomyValue": 585,
-        "brickeconomyCurrency": "USD"
+        "setUrl": "https://www.brickeconomy.com/set/10302-1/lego-transformers-optimus-prime",
+        "searchAttempts": [
+          {
+            "query": "10302-1",
+            "usedFallbackTimeout": false,
+            "timeoutUsedMs": 20000
+          }
+        ],
+        "usedFallbackTimeout": false,
+        "timeoutUsedMs": 20000
       },
       {
         "setNumber": "10311-1",
         "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/10311-1/lego-botanical-collection-orchid"
+        "reason": "HTTP 403 for https://www.brickeconomy.com/search.ashx?query=10311-1",
+        "status": 403,
+        "timeout": false
       },
       {
         "setNumber": "10316-1",
         "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/10316-1/lego-the-lord-of-the-rings-rivendell"
+        "reason": "HTTP 403 for https://www.brickeconomy.com/search.ashx?query=10316-1",
+        "status": 403,
+        "timeout": false
       },
       {
         "setNumber": "10333-1",
         "found": false,
         "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/10333-1/lego-the-lord-of-the-rings-barad-dur"
+        "setUrl": "https://www.brickeconomy.com/set/10333-1/lego-the-lord-of-the-rings-barad-dur",
+        "searchAttempts": [
+          {
+            "query": "10333-1",
+            "usedFallbackTimeout": false,
+            "timeoutUsedMs": 20000
+          }
+        ],
+        "usedFallbackTimeout": false,
+        "timeoutUsedMs": 20000
       },
       {
         "setNumber": "10338-1",
         "found": false,
         "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/10338-1/lego-transformers-bumblebee"
+        "setUrl": "https://www.brickeconomy.com/set/10338-1/lego-transformers-bumblebee",
+        "searchAttempts": [
+          {
+            "query": "10338-1",
+            "usedFallbackTimeout": false,
+            "timeoutUsedMs": 20000
+          }
+        ],
+        "usedFallbackTimeout": false,
+        "timeoutUsedMs": 20000
       },
       {
         "setNumber": "10354-1",
         "found": false,
         "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/10354-1/lego-the-lord-of-the-rings-the-shire"
-      },
-      {
-        "setNumber": "10717-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10717-1/lego-extra-large-brick-box",
-        "brickeconomyValue": 85,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "10754-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10754-1/juniors-super-heroes-spider-man-vs-scorpion-street-showdown",
-        "brickeconomyValue": 40,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "10766-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10766-1/lego-toy-story-4-woody-rc",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "10769-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10769-1/lego-toy-story-4-rv-vacation",
-        "brickeconomyValue": 55,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "10781-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10781-1/spidey-and-his-amazing-friends-spider-mans-techno-trike",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "10782-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10782-1/spidey-and-his-amazing-friends-hulk-vs-rhino-truck-showdown",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
+        "setUrl": "https://www.brickeconomy.com/set/10354-1/lego-the-lord-of-the-rings-the-shire",
+        "searchAttempts": [
+          {
+            "query": "10354-1",
+            "usedFallbackTimeout": false,
+            "timeoutUsedMs": 20000
+          }
+        ],
+        "usedFallbackTimeout": false,
+        "timeoutUsedMs": 20000
       },
       {
         "setNumber": "10789-1",
         "found": false,
         "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/10789-1/lego-spider-mans-car-and-doc-ock"
-      },
-      {
-        "setNumber": "10792-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/10792-1/lego-spidey-and-his-amazing-friends-drill-spinner-vehicle",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "11926-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/11926-1/lego-originals-parts-for-wooden-minifigure",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21115-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21115-1/lego-minecraft-the-first-night",
-        "brickeconomyValue": 105,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21120-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21120-1/lego-minecraft-the-snow-hideout",
-        "brickeconomyValue": 60,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21141-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21141-1/lego-minecraft-the-zombie-cave",
-        "brickeconomyValue": 30,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21151-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21151-1/lego-minecraft-the-end-battle",
-        "brickeconomyValue": 50,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21155-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21155-1/lego-minecraft-the-creeper-mine",
-        "brickeconomyValue": 140,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21158-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21158-1/lego-minecraft-the-panda-nursery",
-        "brickeconomyValue": 30,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21161-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21161-1/lego-minecraft-the-crafting-box-30",
-        "brickeconomyValue": 75,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21162-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21162-1/lego-minecraft-the-taiga-adventure",
-        "brickeconomyValue": 20,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21164-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21164-1/lego-minecraft-the-coral-reef",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21166-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21166-1/lego-minecraft-the-abandoned-mine",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21168-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21168-1/lego-minecraft-the-warped-forest",
-        "brickeconomyValue": 35,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21169-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21169-1/lego-minecraft-the-first-adventure",
-        "brickeconomyValue": 80,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21314-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21314-1/lego-ideas-tron-legacy",
-        "brickeconomyValue": 205,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21316-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21316-1/lego-ideas-the-flintstones",
-        "brickeconomyValue": 120,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21317-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21317-1/lego-ideas-steamboat-willie",
-        "brickeconomyValue": 150,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21318-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/21318-1/lego-ideas-treehouse"
-      },
-      {
-        "setNumber": "21319-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21319-1/lego-ideas-central-perk",
-        "brickeconomyValue": 100,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21320-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21320-1/lego-ideas-dinosaur-fossils",
-        "brickeconomyValue": 90,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21322-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21322-1/lego-ideas-pirates-of-barracuda-bay",
-        "brickeconomyValue": 375,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21324-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21324-1/lego-ideas-123-sesame-street",
-        "brickeconomyValue": 190,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21325-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21325-1/lego-ideas-medieval-blacksmith",
-        "brickeconomyValue": 190,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21326-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21326-1/lego-ideas-winnie-the-pooh",
-        "brickeconomyValue": 170,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21328-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/21328-1/lego-ideas-seinfeld",
-        "brickeconomyValue": 150,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "21331-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/21331-1/lego-ideas-sonic-the-hedgehog-green-hill-zone"
-      },
-      {
-        "setNumber": "30163-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30163-1/lego-avengers-thor-and-the-cosmic-cube",
-        "brickeconomyValue": 10,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30165-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30165-1/lego-avengers-hawkeye-with-equipment",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30168-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30168-1/lego-iron-man-3-gun-mounting-system",
-        "brickeconomyValue": 85,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30340-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30340-1/the-lego-movie-2-the-second-part-emmets-piece-offering"
-      },
-      {
-        "setNumber": "30341-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30341-1/lego-monkie-kids-delivery-bike"
-      },
-      {
-        "setNumber": "30443-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30443-1/lego-spider-man-far-from-home-spider-man-bridge-battle"
-      },
-      {
-        "setNumber": "30451-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30451-1/lego-spider-mans-mini-spider-crawler"
-      },
-      {
-        "setNumber": "30452-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30452-1/lego-avengers-endgame-iron-man-and-dum-e"
-      },
-      {
-        "setNumber": "30453-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30453-1/lego-captain-marvel-and-nick-fury"
-      },
-      {
-        "setNumber": "30454-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30454-1/shang-chi-and-the-great-protector"
-      },
-      {
-        "setNumber": "30460-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30460-1/the-lego-movie-2-the-second-part-rexs-plantimal-ambush"
-      },
-      {
-        "setNumber": "30464-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30464-1/lego-hidden-side-el-fuegos-stunt-cannon"
-      },
-      {
-        "setNumber": "30495-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30495-1/lego-star-wars-at-st",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30496-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30496-1/lego-star-wars-rogue-one-u-wing-fighter"
-      },
-      {
-        "setNumber": "30526-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30526-1/the-lego-batman-movie-the-mini-ultimate-batmobile"
-      },
-      {
-        "setNumber": "30562-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30562-1/lego-season-3-monkie-kids-underwater-journey"
-      },
-      {
-        "setNumber": "30571-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30571-1/lego-creator-pelican",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30602-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30602-1/lego-star-wars-first-order-stormtrooper",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30610-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30610-1/lego-giant-man-hank-pym",
-        "brickeconomyValue": 20,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30611-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30611-1/lego-star-wars-r2-d2",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30614-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30614-1/lego-lex-luthor",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30624-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30624-1/lego-star-wars-obi-wan-kenobi-collectible-minifigure",
-        "brickeconomyValue": 20,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30625-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30625-1/lego-star-wars-luke-skywalker-with-blue-milk",
-        "brickeconomyValue": 30,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30628-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30628-1/lego-harry-potter-monster-book-of-monsters",
-        "brickeconomyValue": 45,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "30652-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/30652-1/doctor-stranges-interdimensional-portal"
-      },
-      {
-        "setNumber": "30654-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/30654-1/lego-star-wars-x-wing-starfighter",
-        "brickeconomyValue": 10,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "31109-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/31109-1/lego-creator-3-in-1-pirate-ship",
-        "brickeconomyValue": 135,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "31120-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/31120-1/lego-creator-3-in-1-medieval-castle",
-        "brickeconomyValue": 130,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40145-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40145-1/lego-brand-retail-store",
-        "brickeconomyValue": 50,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40176-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40176-1/lego-star-wars-rogue-one-scarif-stormtrooper",
-        "brickeconomyValue": 40,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40178-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40178-1/iconic-vip-set",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40186-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40186-1/lego-year-of-the-pig",
-        "brickeconomyValue": 30,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40199-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40199-1/lego-billund-airport",
-        "brickeconomyValue": 130,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40268-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40268-1/lego-star-wars-rogue-one-r3-m2",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40288-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40288-1/lego-star-wars-bb-8",
-        "brickeconomyValue": 20,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40289-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40289-1/lego-harry-potter-diagon-alley",
-        "brickeconomyValue": 55,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40298-1",
-        "found": false,
-        "reason": "value-not-found",
-        "setUrl": "https://www.brickeconomy.com/set/40298-1/lego-star-wars-dj"
-      },
-      {
-        "setNumber": "40299-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40299-1/lego-star-wars-solo-kessel-mine-worker",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40300-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40300-1/lego-star-wars-han-solo-mudtrooper",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40305-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40305-1/microscale-lego-brand-store",
-        "brickeconomyValue": 50,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40333-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40333-1/lego-star-wars-battle-of-hoth-20th-anniversary-edition",
-        "brickeconomyValue": 50,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40334-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40334-1/lego-avengers-tower",
-        "brickeconomyValue": 35,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40335-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40335-1/lego-ideas-space-rocket-ride",
-        "brickeconomyValue": 30,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40336-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40336-1/lego-hidden-side-newbury-juice-bar",
-        "brickeconomyValue": 20,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40337-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40337-1/lego-christmas-gingerbread-house",
-        "brickeconomyValue": 40,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40338-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40338-1/lego-christmas-tree",
-        "brickeconomyValue": 50,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40343-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40343-1/spider-man-and-the-museum-break-in-minifigure-pack",
-        "brickeconomyValue": 50,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40351-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40351-1/lego-brickheadz-halloween-ghost",
-        "brickeconomyValue": 35,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40353-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40353-1/lego-brickheadz-reindeer-elf-elfie",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40362-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40362-1/lego-star-wars-battle-of-endor",
-        "brickeconomyValue": 40,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40367-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40367-1/lego-brickheadz-lady-liberty",
-        "brickeconomyValue": 20,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40374-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40374-1/lego-ninjago-rebooted-golden-zane-accessory-set",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40407-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40407-1/lego-star-wars-death-star-ii-battle",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40418-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40418-1/lego-avengers-falcon-black-widow-team-up",
-        "brickeconomyValue": 20,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40433-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40433-1/lego-batman-1989-batmobile",
-        "brickeconomyValue": 150,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40434-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40434-1/lego-creator-reindeer",
-        "brickeconomyValue": 10,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40435-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40435-1/lego-plants-from-plants",
-        "brickeconomyValue": 15,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40448-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40448-1/lego-ideas-vintage-car",
-        "brickeconomyValue": 30,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40451-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40451-1/lego-star-wars-tatooine-homestead",
-        "brickeconomyValue": 20,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40454-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40454-1/lego-spider-man-versus-venom-and-iron-venom",
-        "brickeconomyValue": 30,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40483-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40483-1/lego-star-wars-luke-skywalkers-lightsaber",
-        "brickeconomyValue": 200,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40486-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40486-1/lego-mini-adidas-originals-superstar",
-        "brickeconomyValue": 30,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40525-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40525-1/lego-avengers-endgame-endgame-battle",
-        "brickeconomyValue": 20,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40531-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40531-1/lego-star-wars-lars-family-homestead-kitchen",
-        "brickeconomyValue": 30,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40532-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40532-1/lego-vintage-taxi",
-        "brickeconomyValue": 40,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40533-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40533-1/lego-ideas-cosmic-cardboard-adventures",
-        "brickeconomyValue": 20,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40557-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40557-1/lego-star-wars-defence-of-hoth",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40558-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40558-1/lego-star-wars-clone-trooper-command-station",
-        "brickeconomyValue": 30,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40566-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40566-1/lego-ideas-ray-the-castaway",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40567-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40567-1/lego-forestmen-forest-hideout",
-        "brickeconomyValue": 50,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40574-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40574-1/creator-lego-brand-store",
-        "brickeconomyValue": 60,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40580-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40580-1/lego-blacktron-cruiser",
-        "brickeconomyValue": 40,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40581-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40581-1/lego-bionicle-tahu-and-takua",
-        "brickeconomyValue": 25,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40586-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40586-1/lego-moving-truck",
-        "brickeconomyValue": 35,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40591-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40591-1/lego-star-wars-death-star-ii",
-        "brickeconomyValue": 85,
-        "brickeconomyCurrency": "USD"
-      },
-      {
-        "setNumber": "40601-1",
-        "found": true,
-        "setUrl": "https://www.brickeconomy.com/set/40601-1/lego-majistos-magical-workshop",
-        "brickeconomyValue": 35,
-        "brickeconomyCurrency": "USD"
+        "setUrl": "https://www.brickeconomy.com/set/10789-1/lego-spider-mans-car-and-doc-ock",
+        "searchAttempts": [
+          {
+            "query": "10789-1",
+            "usedFallbackTimeout": false,
+            "timeoutUsedMs": 20000
+          }
+        ],
+        "usedFallbackTimeout": false,
+        "timeoutUsedMs": 20000
       }
     ]
   }
