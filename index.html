@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BrickIQ v1</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">🧱</div>
+          <div>
+            <h1>BrickIQ</h1>
+            <p>Portfolio valuation explorer · GBP</p>
+          </div>
+        </div>
+        <button id="refreshBtn" class="refresh-btn">Refresh valuations</button>
+      </header>
+
+      <section class="meta-row">
+        <span id="freshness" class="badge"></span>
+        <span class="badge subtle">Manual refresh model · single-user preview</span>
+        <span class="badge warn" id="assumptionBadge">Includes estimated fields where source values are missing</span>
+      </section>
+
+      <section class="kpi-grid" id="kpis"></section>
+
+      <section class="controls">
+        <input id="searchInput" type="search" placeholder="Search set #, name, theme..." />
+        <select id="filterSelect">
+          <option value="all">All sets</option>
+          <option value="estimated">Only rows with estimated values</option>
+        </select>
+      </section>
+
+      <section class="table-wrap">
+        <table id="setsTable">
+          <thead>
+            <tr>
+              <th data-sort="setNumber">Set #</th>
+              <th data-sort="name">Name</th>
+              <th data-sort="qty">Qty</th>
+              <th data-sort="nibPriceGbp">NIB price</th>
+              <th data-sort="usedPriceGbp">Used price</th>
+              <th data-sort="rrpGbp">RRP</th>
+              <th data-sort="nibValue">NIB value</th>
+              <th data-sort="usedValue">Used value</th>
+              <th data-sort="rrpValue">RRP value</th>
+              <th data-sort="delta">Δ vs RRP (NIB)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </div>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
