@@ -8,24 +8,53 @@
   </head>
   <body>
     <div class="app-shell">
-      <header class="topbar">
-        <div class="brand">
-          <div class="logo" aria-hidden="true">🧱</div>
-          <div>
-            <h1>BrickIQ</h1>
-            <p>Portfolio valuation explorer · GBP</p>
+      <header class="hero">
+        <div class="hero-top">
+          <div class="brand">
+            <div class="logo" aria-hidden="true">B</div>
+            <div>
+              <h1>BrickIQ</h1>
+              <p class="tagline">Collector intelligence cockpit · GBP valuation index</p>
+            </div>
           </div>
+          <button id="refreshBtn" class="refresh-btn">Refresh valuations</button>
         </div>
-        <button id="refreshBtn" class="refresh-btn">Refresh valuations</button>
+
+        <div class="meta-row">
+          <span id="freshness" class="badge"></span>
+          <span class="badge subtle">Index source: synced Google Sheet (price index only)</span>
+          <span class="badge warn" id="assumptionBadge">Estimated values are clearly flagged with est.</span>
+        </div>
+
+        <div class="process-note">
+          <h2>How refresh works</h2>
+          <p>
+            Refresh reloads the latest snapshot generated from the canonical sheet. It does not call live marketplace APIs.
+            Think of this as a reliable pricing index pulse, not a real-time trade feed.
+          </p>
+        </div>
       </header>
 
-      <section class="meta-row">
-        <span id="freshness" class="badge"></span>
-        <span class="badge subtle">Manual refresh model · single-user preview</span>
-        <span class="badge warn" id="assumptionBadge">Includes estimated fields where source values are missing</span>
+      <section class="kpi-grid" id="kpis"></section>
+
+      <section class="insight-strip" aria-labelledby="insightTitle">
+        <div class="strip-head">
+          <h2 id="insightTitle">Momentum story</h2>
+          <p>Top movers by NIB delta vs RRP</p>
+        </div>
+        <div id="galleryRail" class="gallery-rail"></div>
       </section>
 
-      <section class="kpi-grid" id="kpis"></section>
+      <section class="snapshot-grid">
+        <article class="snapshot-card" aria-labelledby="changesTitle">
+          <h2 id="changesTitle">What changed since last snapshot</h2>
+          <div id="changesList" class="changes-list"></div>
+        </article>
+        <article class="snapshot-card" aria-labelledby="confidenceTitle">
+          <h2 id="confidenceTitle">Confidence at a glance</h2>
+          <div id="confidenceBars" class="confidence-bars"></div>
+        </article>
+      </section>
 
       <section class="controls">
         <input id="searchInput" type="search" placeholder="Search set #, name, theme..." />
