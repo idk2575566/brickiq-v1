@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BrickIQ v1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -25,16 +28,9 @@
 
         <div class="meta-row">
           <span id="freshness" class="badge"></span>
-          <span class="badge subtle">Index source: synced Google Sheet (price index only)</span>
-          <span class="badge warn" id="assumptionBadge">Estimated values are clearly flagged with est.</span>
-        </div>
-
-        <div class="process-note">
-          <h2>How refresh works</h2>
-          <p>
-            Refresh reloads the latest snapshot generated from the canonical sheet. It does not call live marketplace APIs.
-            Think of this as a reliable pricing index pulse, not a real-time trade feed.
-          </p>
+          <span class="badge subtle">Source: synced sheet snapshot</span>
+          <span class="badge subtle">Refresh = latest index pull</span>
+          <span class="badge warn" id="assumptionBadge">Estimates marked as est.</span>
         </div>
       </header>
 
@@ -126,7 +122,7 @@
       <article class="product-detail-sheet">
         <div class="detail-actions-top">
           <h2>Set detail</h2>
-          <button id="detailClose" class="chip-btn" aria-label="Close detail">Close</button>
+          <button id="detailClose" class="modal-close-btn" aria-label="Close detail dialog">✕ Close</button>
         </div>
         <div id="detailBody"></div>
         <div class="detail-footer sticky-cta-row">

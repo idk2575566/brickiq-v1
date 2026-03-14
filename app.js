@@ -94,7 +94,7 @@ function themeBadgeDataUrl(theme, small = false) {
       </defs>
       <rect x='1' y='1' width='${w - 2}' height='${h - 2}' rx='${small ? 12 : 15}' fill='url(#g)' stroke='rgba(255,255,255,0.45)'/>
       <circle cx='${small ? 14 : 18}' cy='${h / 2}' r='${small ? 3.5 : 4}' fill='rgba(255,255,255,0.9)'/>
-      <text x='${small ? 24 : 30}' y='${small ? 18 : 24}' fill='white' font-size='${fs}' font-family='Inter,Arial,sans-serif' font-weight='700' letter-spacing='.4'>${spec.label}</text>
+      <text x='${small ? 24 : 30}' y='${small ? 18 : 24}' fill='white' font-size='${fs}' font-family='Poppins,Inter,Arial,sans-serif' font-weight='700' letter-spacing='.4'>${spec.label}</text>
     </svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
@@ -113,8 +113,8 @@ function placeholderImage(setNumber) {
       <g fill='none' stroke='rgba(255,255,255,0.25)'>
         <rect x='34' y='34' width='532' height='382' rx='22'/>
       </g>
-      <text x='50%' y='47%' fill='white' font-size='48' text-anchor='middle' font-family='Inter,Arial,sans-serif' font-weight='700'>Set ${safeSet}</text>
-      <text x='50%' y='57%' fill='rgba(255,255,255,0.8)' font-size='24' text-anchor='middle' font-family='Inter,Arial,sans-serif'>Image pending catalog match</text>
+      <text x='50%' y='47%' fill='white' font-size='48' text-anchor='middle' font-family='Poppins,Inter,Arial,sans-serif' font-weight='700'>Set ${safeSet}</text>
+      <text x='50%' y='57%' fill='rgba(255,255,255,0.8)' font-size='24' text-anchor='middle' font-family='Poppins,Inter,Arial,sans-serif'>Image pending catalog match</text>
     </svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
