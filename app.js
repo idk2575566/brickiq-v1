@@ -158,10 +158,24 @@ function valueRows(rows) {
 
 const total = (rows, key) => rows.reduce((sum, r) => sum + (r[key] || 0), 0);
 
+function semanticSignClass(value) {
+  if (!Number.isFinite(value)) return 'gain-flat';
+  if (value > 0) return 'gain-up';
+  if (value < 0) return 'gain-down';
+  return 'gain-flat';
+}
+
+function formatSignedPct(value, digits = 1) {
+  if (!Number.isFinite(value)) return 'n/a';
+  const sign = value > 0 ? '+' : value < 0 ? '−' : '';
+  return `${sign}${Math.abs(value).toFixed(digits)}%`;
+}
+
 function formatUpliftIndicator(row) {
   if (!Number.isFinite(row.upliftPct)) return '<span class="gain-flat">→ n/a</span>';
-  const up = row.upliftPct >= 0;
-  return `<span class="${up ? 'gain-up' : 'gain-down'}">${up ? '▲' : '▼'} ${Math.abs(row.upliftPct).toFixed(1)}%</span>`;
+  const up = row.upliftPct > 0;
+  const down = row.upliftPct < 0;
+  return `<span class="${semanticSignClass(row.upliftPct)}">${up ? '▲' : down ? '▼' : '→'} ${Math.abs(row.upliftPct).toFixed(1)}%</span>`;
 }
 
 function compactMarketSource(row) {
@@ -347,9 +361,12 @@ function filteredSortedRows() {
     if (typeof av === 'string' || typeof bv === 'string') {
       cmp = String(av ?? '').localeCompare(String(bv ?? ''));
     } else {
-      const na = Number.isFinite(av) ? av : Number.NEGATIVE_INFINITY;
-      const nb = Number.isFinite(bv) ? bv : Number.NEGATIVE_INFINITY;
-      cmp = na - nb;
+      const aFinite = Number.isFinite(av);
+      const bFinite = Number.isFinite(bv);
+      if (!aFinite && !bFinite) cmp = 0;
+      else if (!aFinite) cmp = 1;
+      else if (!bFinite) cmp = -1;
+      else cmp = av - bv;
     }
 
     return state.sortDir === 'asc' ? cmp : -cmp;
@@ -382,7 +399,7 @@ function renderKpis(rows) {
 
   const cards = [
     ['Total Secondary Market Value', GBP.format(marketTotal), 'Computed market unit × qty'],
-    ['Total uplift vs RRP', `${GBP.format(uplift)} ${Number.isFinite(upliftPct) ? `(${upliftPct >= 0 ? '+' : ''}${upliftPct.toFixed(1)}%)` : ''}`.trim(), uplift >= 0 ? 'Above retail baseline' : 'Below retail baseline'],
+    ['Total uplift vs RRP', `${GBP.format(uplift)} ${Number.isFinite(upliftPct) ? `(<span class="${semanticSignClass(upliftPct)}">${formatSignedPct(upliftPct)}</span>)` : ''}`.trim(), uplift >= 0 ? 'Above retail baseline' : 'Below retail baseline'],
     ['RRP baseline', GBP.format(rrp), 'Collection retail baseline'],
     ['Sets in view', String(rows.length), 'Filtered results'],
     ['Themes in view', String(themes), 'Theme filter updates this view']
@@ -536,7 +553,7 @@ function renderTable(rows) {
         <td>${GBP.format(r.usedValue)}</td>
         <td>${GBP.format(r.rrpValue)}</td>
         <td>
-          <div class="delta-stack ${r.upliftAbsolute >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(r.upliftAbsolute)}</div>
+          <div class="delta-stack ${r.upliftAbsolute > 0 ? 'delta-plus' : r.upliftAbsolute < 0 ? 'delta-minus' : 'gain-flat'}">${GBP.format(r.upliftAbsolute)}</div>
           <div class="delta-pct">${formatUpliftIndicator(r)}</div>
         </td>
         <td>${actionButtons(r)}</td>
@@ -654,10 +671,10 @@ function renderSnapshotChanges(rows) {
       ['Inferred rows', `${now.estimatedRows} rows contain inferred fields`]
     ];
   } else {
-    const pct = prev.nib ? (((now.nib - prev.nib) / prev.nib) * 100).toFixed(1) : '0.0';
+    const pct = prev.nib ? (((now.nib - prev.nib) / prev.nib) * 100) : 0;
     items = [
       ['Snapshot transition', `${new Date(prev.generatedAt).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })} → ${new Date(now.generatedAt).toLocaleString('en-GB', { dateStyle: 'short', timeStyle: 'short' })}`],
-      ['NIB portfolio move', `${GBP.format(now.nib - prev.nib)} (${pct}%)`],
+      ['NIB portfolio move', `${GBP.format(now.nib - prev.nib)} (<span class="${semanticSignClass(pct)}">${formatSignedPct(pct)}</span>)`],
       ['Used portfolio move', `${GBP.format(now.used - prev.used)}`],
       ['Set count change', `${now.setCount - prev.setCount >= 0 ? '+' : ''}${now.setCount - prev.setCount}`],
       ['Inferred row change', `${now.estimatedRows - prev.estimatedRows >= 0 ? '+' : ''}${now.estimatedRows - prev.estimatedRows}`]
@@ -720,7 +737,7 @@ function openDetail(setNumber) {
       <div class="spec-tile"><label>Used unit</label><strong>${GBP.format(row.usedPriceGbp)}</strong></div>
       <div class="spec-tile"><label>RRP unit</label><strong>${GBP.format(row.rrpGbp)}</strong></div>
       <div class="spec-tile"><label>Market value (computed)</label><strong>${row.marketValue != null ? GBP.format(row.marketValue) : '—'}</strong></div>
-      <div class="spec-tile"><label>Uplift vs RRP</label><strong class="${row.upliftAbsolute >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(row.upliftAbsolute)}</strong></div>
+      <div class="spec-tile"><label>Uplift vs RRP</label><strong class="${row.upliftAbsolute > 0 ? 'delta-plus' : row.upliftAbsolute < 0 ? 'delta-minus' : 'gain-flat'}">${GBP.format(row.upliftAbsolute)}</strong></div>
     </section>
     ${!state.hasBrickEconomyData && !state.hasBrickLinkData ? '<p class="detail-note">No external market steering values are present in the current data export.</p>' : ''}
   `;

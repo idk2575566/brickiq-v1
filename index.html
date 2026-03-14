@@ -94,7 +94,7 @@
                   <th data-sort="marketValue">Market value</th>
                   <th data-sort="usedValue">Used value</th>
                   <th data-sort="rrpValue">RRP value</th>
-                  <th data-sort="upliftAbsolute">Uplift vs RRP</th>
+                  <th data-sort="upliftPct">Uplift % vs RRP</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -108,6 +108,8 @@
               <select id="mobileSortSelect">
                 <option value="marketValue:desc">Sort: Market price high → low</option>
                 <option value="marketValue:asc">Sort: Market price low → high</option>
+                <option value="upliftPct:desc">Sort: % increase high → low</option>
+                <option value="upliftPct:asc">Sort: % decrease low → high</option>
                 <option value="name:asc">Sort: Name A → Z</option>
                 <option value="name:desc">Sort: Name Z → A</option>
               </select>
