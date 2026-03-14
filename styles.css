@@ -95,6 +95,20 @@ h2, h3 { font-family: var(--font-heading); letter-spacing: .1px; }
 .badge { background: rgba(37,99,235,.12); color: #1e40af; padding: 7px 10px; border-radius: 999px; font-size: .82rem; border: 1px solid rgba(37,99,235,.28); font-weight: 600; }
 .badge.subtle { background: rgba(250,204,21,.18); border-color: rgba(217,119,6,.24); color: #7c2d12; }
 .badge.warn { background: rgba(239,68,68,.14); border-color: rgba(220,38,38,.3); color: #991b1b; }
+.source-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,.42);
+  background: rgba(241,245,249,.82);
+  color: #334155;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: 1.45;
+  white-space: nowrap;
+}
 
 .kpi-grid { display: grid; grid-template-columns: repeat(5, minmax(150px,1fr)); gap: var(--space-3); margin: var(--space-4) 0 var(--space-5); }
 .kpi, .snapshot-card {
@@ -335,6 +349,7 @@ tr:hover td { background: rgba(255,255,255,.02); }
 .market-price-line label, .market-alt-line label { display: block; color: var(--muted); font-size: .72rem; }
 .market-price-line p, .market-alt-line p { margin: 1px 0 0; font-size: 1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .market-alt-line p { font-size: .9rem; font-weight: 650; }
+.market-source-line { margin-top: 3px; }
 .hint-muted { font-size: .76rem; color: var(--muted); }
 .set-card .row-actions { margin-top: var(--space-2); gap: var(--space-2); }
 .set-card .row-actions .chip-btn { flex: 1; min-width: 44px; }
@@ -386,6 +401,7 @@ tr:hover td { background: rgba(255,255,255,.02); }
 .product-title p { margin: 4px 0 0; color: var(--muted); font-size: .9rem; }
 .product-price { text-align: right; }
 .product-price .main { margin: 0; font-size: 1.4rem; font-weight: 800; }
+.product-source { margin-top: 4px; display: flex; justify-content: flex-end; }
 .product-price .sub { margin: 2px 0 0; color: var(--muted); font-size: .8rem; }
 .trust-pills { margin-top: var(--space-2); display: flex; gap: 6px; flex-wrap: wrap; }
 
@@ -475,6 +491,7 @@ tr:hover td { background: rgba(255,255,255,.02); }
   .set-card-media { width: 108px; min-width: 108px; }
   .product-trust-row { flex-direction: column; }
   .product-price { text-align: left; }
+  .product-source { justify-content: flex-start; }
   .detail-grid { grid-template-columns: 1fr 1fr; }
 }
 

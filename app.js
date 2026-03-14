@@ -164,6 +164,22 @@ function formatUpliftIndicator(row) {
   return `<span class="${up ? 'gain-up' : 'gain-down'}">${up ? '▲' : '▼'} ${Math.abs(row.upliftPct).toFixed(1)}%</span>`;
 }
 
+function compactMarketSource(row) {
+  const details = Array.isArray(row.marketSourceDetails) ? row.marketSourceDetails : [];
+  if (details.includes('BrickEconomy') && details.includes('BrickLink')) return 'Avg (BE+BL)';
+  if (details.includes('BrickEconomy')) return 'BrickEconomy';
+  if (details.includes('BrickLink')) return 'BrickLink';
+
+  const source = String(row.marketSource || '').toLowerCase();
+  if (source.includes('sheet')) return 'Sheet';
+  if (source.includes('brickset')) return 'Brickset';
+  return 'Sheet';
+}
+
+function sourceChip(row) {
+  return `<span class="source-chip" title="${row.marketSource || 'Source unavailable'}">Source: ${compactMarketSource(row)}</span>`;
+}
+
 const imageUrlForSet = (setNumber) => `https://images.brickset.com/sets/images/${encodeURIComponent(setNumber)}.jpg`;
 
 const THEME_BADGE_META = {
@@ -510,7 +526,10 @@ function renderTable(rows) {
           </div>
         </td>
         <td>${r.qty}</td>
-        <td>${r.marketUnit != null ? GBP.format(r.marketUnit) : '—'}</td>
+        <td>
+          <div>${r.marketUnit != null ? GBP.format(r.marketUnit) : '—'}</div>
+          <div class="row-sub">${sourceChip(r)}</div>
+        </td>
         <td>${GBP.format(r.usedPriceGbp)}</td>
         <td>${GBP.format(r.rrpGbp)}</td>
         <td>${r.marketValue != null ? GBP.format(r.marketValue) : '—'}</td>
@@ -556,6 +575,7 @@ function renderMobileCards(rows) {
             <span>${r.marketValue != null ? GBP.format(r.marketValue) : '—'} total</span>
             ${formatUpliftIndicator(r)}
           </div>
+          <div class="market-source-line">${sourceChip(r)}</div>
         </div>
       </div>
       ${actionButtons(r)}
@@ -688,6 +708,7 @@ function openDetail(setNumber) {
       </div>
       <div class="product-price">
         <p class="main">${row.marketValue != null ? GBP.format(row.marketValue) : '—'}</p>
+        <div class="product-source">${sourceChip(row)}</div>
         <p class="sub">Computed market value · Qty ${row.qty}</p>
         <p class="sub">${formatUpliftIndicator(row)} vs RRP</p>
       </div>
