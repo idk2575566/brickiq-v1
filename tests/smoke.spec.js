@@ -18,6 +18,17 @@ for (const viewport of [
     await expect(page.locator('#kpis .kpi')).toHaveCount(5);
     await expect(page.locator('#themeTiles .theme-tile').first()).toBeVisible();
 
+    const paginationText = await page.locator('#paginationBar .pagination-meta').textContent();
+    const totalMatch = paginationText && paginationText.match(/of\s+(\d+)\s+sets/i);
+    const totalRows = totalMatch ? Number(totalMatch[1]) : 0;
+    expect(totalRows).toBeGreaterThan(500);
+
+    const starWarsTile = page.locator('#themeTiles .theme-tile', { hasText: 'Star Wars' }).first();
+    if (await starWarsTile.count()) {
+      await starWarsTile.click();
+      await expect(page.locator('#themeTiles .theme-tile.active').first()).toContainText('Star Wars');
+    }
+
     await page.locator('#searchInput').fill('Star Wars');
     await expect(page.locator('#setsTable tbody tr').first()).toBeVisible();
 

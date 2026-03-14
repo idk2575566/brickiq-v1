@@ -17,7 +17,14 @@ const isTruthy = (v) => {
   return s === '1' || s === 'true' || s === 'yes' || s === 'y' || s === 'x';
 };
 
-const mapped = rows.slice(1).map((row) => {
+const hasCoreData = (row) => {
+  const candidates = ['Number', 'SetName', 'Theme', 'QtyOwned', 'QtyWanted', 'Own', 'Want'];
+  return candidates.some((key) => String(get(row, key) ?? '').trim() !== '');
+};
+
+const mapped = rows.slice(1)
+.filter(hasCoreData)
+.map((row) => {
   const setNumber = get(row, 'Number');
   const variant = get(row, 'Variant');
   const setCode = setNumber && variant ? `${setNumber}-${variant}` : setNumber || '';
@@ -26,7 +33,7 @@ const mapped = rows.slice(1).map((row) => {
   const qty = qtyRaw && qtyRaw > 0 ? qtyRaw : 1;
 
   const qtyWanted = num(get(row, 'QtyWanted')) ?? 0;
-  const hasOwned = isTruthy(get(row, 'Own')) || qty > 0;
+  const hasOwned = isTruthy(get(row, 'Own')) || ((qtyRaw ?? 0) > 0);
   const hasWishlist = isTruthy(get(row, 'Want')) || qtyWanted > 0;
   const ownershipStatus = hasOwned && hasWishlist ? 'both' : (hasOwned ? 'owned' : (hasWishlist ? 'wishlist' : 'unknown'));
 

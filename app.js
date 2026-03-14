@@ -15,7 +15,11 @@ let state = {
   assumptions: [],
   watchlist: [],
   selectedSet: null,
-  isLoading: true
+  isLoading: true,
+  pagination: {
+    page: 1,
+    pageSize: 50
+  }
 };
 
 const byId = (id) => document.getElementById(id);
@@ -142,6 +146,21 @@ function filteredSortedRows() {
   return rows;
 }
 
+function pageCount(totalRows) {
+  return Math.max(1, Math.ceil(totalRows / state.pagination.pageSize));
+}
+
+function pagedRows(rows) {
+  const pages = pageCount(rows.length);
+  if (state.pagination.page > pages) state.pagination.page = pages;
+  const start = (state.pagination.page - 1) * state.pagination.pageSize;
+  return rows.slice(start, start + state.pagination.pageSize);
+}
+
+function resetPage() {
+  state.pagination.page = 1;
+}
+
 function renderKpis(rows) {
   const nib = total(rows, 'nibValue');
   const used = total(rows, 'usedValue');
@@ -210,6 +229,22 @@ function renderThemeTiles() {
   }).join('');
 }
 
+function renderPagination(totalRows) {
+  const totalPages = pageCount(totalRows);
+  const current = Math.min(state.pagination.page, totalPages);
+  const start = totalRows ? ((current - 1) * state.pagination.pageSize) + 1 : 0;
+  const end = totalRows ? Math.min(totalRows, current * state.pagination.pageSize) : 0;
+
+  byId('paginationBar').innerHTML = `
+    <div class="pagination-meta">Showing ${start}-${end} of ${totalRows} sets</div>
+    <div class="pagination-actions">
+      <button class="chip-btn" data-page-nav="prev" ${current <= 1 ? 'disabled' : ''}>Prev</button>
+      <span class="pagination-page">Page ${current} / ${totalPages}</span>
+      <button class="chip-btn" data-page-nav="next" ${current >= totalPages ? 'disabled' : ''}>Next</button>
+    </div>
+  `;
+}
+
 function renderEmptyState(targetId, title, subtitle) {
   byId(targetId).innerHTML = `<div class="empty-state"><p>${title}</p><span>${subtitle}</span></div>`;
 }
@@ -224,18 +259,19 @@ function actionButtons(r) {
   `;
 }
 
-function renderTable() {
-  const rows = filteredSortedRows();
+function renderTable(rows) {
   const tbody = document.querySelector('#setsTable tbody');
+  const pageRows = pagedRows(rows);
 
   if (!rows.length) {
     tbody.innerHTML = `<tr><td colspan="11"><div class="table-empty">No sets match current filters. Try a broader query.</div></td></tr>`;
     renderKpis(rows);
-    renderMobileCards();
+    renderPagination(0);
+    renderMobileCards(pageRows);
     return;
   }
 
-  tbody.innerHTML = rows.map((r) => {
+  tbody.innerHTML = pageRows.map((r) => {
     const estNib = r.estimated.nib ? '<span class="est">est.</span>' : '';
     const estUsed = r.estimated.used ? '<span class="est">est.</span>' : '';
     const estRrp = r.estimated.rrp ? '<span class="est">est.</span>' : '';
@@ -256,11 +292,11 @@ function renderTable() {
     `;
   }).join('');
   renderKpis(rows);
-  renderMobileCards();
+  renderPagination(rows.length);
+  renderMobileCards(pageRows);
 }
 
-function renderMobileCards() {
-  const rows = filteredSortedRows();
+function renderMobileCards(rows) {
   if (!rows.length) {
     renderEmptyState('mobileCards', 'No sets found', 'Adjust your search or filter to continue.');
     return;
@@ -418,7 +454,7 @@ function closeDetail() {
 
 function reRender() {
   const rows = filteredSortedRows();
-  renderTable();
+  renderTable(rows);
   renderGallery(rows);
   renderConfidence(rows);
   renderThemeTiles();
@@ -427,6 +463,7 @@ function reRender() {
 function clearFilters() {
   state.search = '';
   state.filters = { ownership: 'all', confidence: 'all', valueBand: 'all', theme: 'all' };
+  resetPage();
   byId('searchInput').value = '';
   byId('ownershipFilter').value = 'all';
   byId('confidenceFilter').value = 'all';
@@ -455,21 +492,25 @@ async function loadData() {
 
 byId('searchInput').addEventListener('input', (e) => {
   state.search = e.target.value.trim();
+  resetPage();
   reRender();
 });
 
 byId('ownershipFilter').addEventListener('change', (e) => {
   state.filters.ownership = e.target.value;
+  resetPage();
   reRender();
 });
 
 byId('confidenceFilter').addEventListener('change', (e) => {
   state.filters.confidence = e.target.value;
+  resetPage();
   reRender();
 });
 
 byId('valueBandFilter').addEventListener('change', (e) => {
   state.filters.valueBand = e.target.value;
+  resetPage();
   reRender();
 });
 
@@ -491,14 +532,24 @@ document.querySelectorAll('#setsTable th[data-sort]').forEach((th) => {
     const key = th.dataset.sort;
     if (state.sortKey === key) state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
     else { state.sortKey = key; state.sortDir = 'desc'; }
-    renderTable();
+    resetPage();
+    reRender();
   });
 });
 
 document.addEventListener('click', (e) => {
+  const pageNav = e.target.closest('[data-page-nav]');
+  if (pageNav) {
+    if (pageNav.dataset.pageNav === 'prev') state.pagination.page = Math.max(1, state.pagination.page - 1);
+    if (pageNav.dataset.pageNav === 'next') state.pagination.page += 1;
+    reRender();
+    return;
+  }
+
   const tile = e.target.closest('[data-theme]');
   if (tile) {
     state.filters.theme = tile.dataset.theme;
+    resetPage();
     reRender();
     return;
   }
@@ -517,9 +568,7 @@ document.addEventListener('click', (e) => {
     }
     safeSave(WATCHLIST_KEY, state.watchlist);
     renderWatchlist();
-    renderTable();
-    renderGallery(filteredSortedRows());
-    renderMobileCards();
+    reRender();
     return;
   }
 
@@ -543,7 +592,7 @@ byId('detailWatchBtn').addEventListener('click', () => {
   safeSave(WATCHLIST_KEY, state.watchlist);
   byId('detailWatchBtn').textContent = isWatchlisted(state.selectedSet.setNumber) ? 'Remove from Watchlist' : 'Add to Watchlist';
   renderWatchlist();
-  renderTable();
+  reRender();
 });
 
 state.watchlist = safeLoad(WATCHLIST_KEY, []);
