@@ -56,7 +56,7 @@
         </article>
       </section>
 
-      <section class="controls">
+      <section class="controls" aria-label="Filters and search">
         <input id="searchInput" type="search" placeholder="Search set #, name, theme..." />
         <select id="filterSelect">
           <option value="all">All sets</option>
@@ -64,26 +64,53 @@
         </select>
       </section>
 
-      <section class="table-wrap">
-        <table id="setsTable">
-          <thead>
-            <tr>
-              <th data-sort="setNumber">Set #</th>
-              <th data-sort="name">Name</th>
-              <th data-sort="qty">Qty</th>
-              <th data-sort="nibPriceGbp">NIB price</th>
-              <th data-sort="usedPriceGbp">Used price</th>
-              <th data-sort="rrpGbp">RRP</th>
-              <th data-sort="nibValue">NIB value</th>
-              <th data-sort="usedValue">Used value</th>
-              <th data-sort="rrpValue">RRP value</th>
-              <th data-sort="delta">Δ vs RRP (NIB)</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <section class="content-grid">
+        <article class="watchlist-panel snapshot-card" aria-labelledby="watchTitle">
+          <h2 id="watchTitle">Watchlist</h2>
+          <div id="watchlistBody" class="watchlist-body"></div>
+        </article>
+
+        <div class="table-stack">
+          <section class="table-wrap" aria-label="Desktop data table">
+            <table id="setsTable">
+              <thead>
+                <tr>
+                  <th data-sort="setNumber">Set #</th>
+                  <th data-sort="name">Name</th>
+                  <th data-sort="qty">Qty</th>
+                  <th data-sort="nibPriceGbp">NIB price</th>
+                  <th data-sort="usedPriceGbp">Used price</th>
+                  <th data-sort="rrpGbp">RRP</th>
+                  <th data-sort="nibValue">NIB value</th>
+                  <th data-sort="usedValue">Used value</th>
+                  <th data-sort="rrpValue">RRP value</th>
+                  <th data-sort="delta">Δ vs RRP (NIB)</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </section>
+
+          <section id="mobileCards" class="mobile-cards" aria-label="Mobile set cards"></section>
+        </div>
       </section>
     </div>
+
+    <dialog id="detailDialog" class="detail-dialog">
+      <article>
+        <div class="detail-actions-top">
+          <h2>Set detail</h2>
+          <button id="detailClose" class="chip-btn" aria-label="Close detail">Close</button>
+        </div>
+        <div id="detailBody"></div>
+        <div class="detail-footer">
+          <button id="detailWatchBtn" class="refresh-btn">Add to Watchlist</button>
+        </div>
+      </article>
+    </dialog>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
 
     <script src="app.js" type="module"></script>
   </body>
