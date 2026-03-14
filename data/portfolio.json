@@ -43,7 +43,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": null,
+      "brickeconomyCurrency": null,
+      "brickeconomyUrl": null,
+      "brickeconomyUpdatedAt": null
     },
     {
       "setId": "8583",
@@ -74,7 +78,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 160,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/7877-1/lego-star-wars-naboo-starfighter",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.965Z"
     },
     {
       "setId": "8584",
@@ -105,7 +113,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 235,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/7879-1/lego-star-wars-hoth-echo-base",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "8318",
@@ -136,7 +148,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 110,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/7913-1/lego-star-wars-the-clone-wars-clone-trooper-battle-pack",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "8585",
@@ -167,7 +183,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 80,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/7956-1/lego-star-wars-ewok-attack",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "8592",
@@ -198,7 +218,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 275,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/7965-1/lego-star-wars-millennium-falcon",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "7208",
@@ -229,7 +253,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 40,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/8083-1/lego-star-wars-rebel-trooper-battle-pack",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "7206",
@@ -260,7 +288,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 35,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/8084-1/lego-star-wars-snowtrooper-battle-pack",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "8883",
@@ -291,7 +323,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 145,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/9488-1/elite-clone-trooper-commando-droid-battle-pack",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "8885",
@@ -322,7 +358,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 40,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/9489-1/star-wars-endor-rebel-trooper-imperial-trooper-battle-pack",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "8887",
@@ -353,7 +393,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 55,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/9490-1/lego-star-wars-droid-escape",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "8882",
@@ -384,7 +428,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 130,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/9493-1/lego-star-wars-x-wing-starfighter",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "9204",
@@ -415,7 +463,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 175,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/9498-1/lego-star-wars-the-clone-wars-saesee-tiins-jedi-starfighter",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "9208",
@@ -446,7 +498,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 80,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/9509-1/lego-star-wars-advent-calendar",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "9201",
@@ -477,7 +533,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 630,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/9515-1/lego-star-wars-the-clone-wars-malevolence",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "9266",
@@ -508,7 +568,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 645,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/9526-1/lego-star-wars-palpatines-arrest",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "6522",
@@ -539,7 +603,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 970,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/10188-1/lego-star-wars-death-star",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "8075",
@@ -570,7 +638,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 395,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/10215-1/lego-star-wars-obi-wans-jedi-starfighter",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "9286",
@@ -601,7 +673,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 225,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/10225-1/lego-star-wars-r2-d2",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "22807",
@@ -632,7 +708,11 @@
         "nib": "BrickLinkSoldPriceNew",
         "used": "BrickLinkSoldPriceUsed",
         "rrp": "UKRetailPrice"
-      }
+      },
+      "brickeconomyValue": 855,
+      "brickeconomyCurrency": "USD",
+      "brickeconomyUrl": "https://www.brickeconomy.com/set/10236-1/lego-star-wars-ewok-village",
+      "brickeconomyUpdatedAt": "2026-03-14T13:36:12.966Z"
     },
     {
       "setId": "22758",
@@ -23598,5 +23678,153 @@
         "rrp": "estimated"
       }
     }
-  ]
+  ],
+  "brickeconomyPilot": {
+    "attemptedUniqueSets": 20,
+    "requestDelayMs": 2500,
+    "robotsUrl": "https://www.brickeconomy.com/robots.txt",
+    "generatedAt": "2026-03-14T13:36:12.966Z",
+    "enrichedItems": 19,
+    "missingItems": 1,
+    "bySet": [
+      {
+        "setNumber": "6866-1",
+        "found": false,
+        "reason": "HTTP 403 for https://www.brickeconomy.com/search.ashx?query=6866-1"
+      },
+      {
+        "setNumber": "7877-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/7877-1/lego-star-wars-naboo-starfighter",
+        "brickeconomyValue": 160,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "7879-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/7879-1/lego-star-wars-hoth-echo-base",
+        "brickeconomyValue": 235,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "7913-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/7913-1/lego-star-wars-the-clone-wars-clone-trooper-battle-pack",
+        "brickeconomyValue": 110,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "7956-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/7956-1/lego-star-wars-ewok-attack",
+        "brickeconomyValue": 80,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "7965-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/7965-1/lego-star-wars-millennium-falcon",
+        "brickeconomyValue": 275,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "8083-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/8083-1/lego-star-wars-rebel-trooper-battle-pack",
+        "brickeconomyValue": 40,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "8084-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/8084-1/lego-star-wars-snowtrooper-battle-pack",
+        "brickeconomyValue": 35,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "9488-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/9488-1/elite-clone-trooper-commando-droid-battle-pack",
+        "brickeconomyValue": 145,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "9489-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/9489-1/star-wars-endor-rebel-trooper-imperial-trooper-battle-pack",
+        "brickeconomyValue": 40,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "9490-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/9490-1/lego-star-wars-droid-escape",
+        "brickeconomyValue": 55,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "9493-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/9493-1/lego-star-wars-x-wing-starfighter",
+        "brickeconomyValue": 130,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "9498-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/9498-1/lego-star-wars-the-clone-wars-saesee-tiins-jedi-starfighter",
+        "brickeconomyValue": 175,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "9509-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/9509-1/lego-star-wars-advent-calendar",
+        "brickeconomyValue": 80,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "9515-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/9515-1/lego-star-wars-the-clone-wars-malevolence",
+        "brickeconomyValue": 630,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "9526-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/9526-1/lego-star-wars-palpatines-arrest",
+        "brickeconomyValue": 645,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "10188-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/10188-1/lego-star-wars-death-star",
+        "brickeconomyValue": 970,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "10215-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/10215-1/lego-star-wars-obi-wans-jedi-starfighter",
+        "brickeconomyValue": 395,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "10225-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/10225-1/lego-star-wars-r2-d2",
+        "brickeconomyValue": 225,
+        "brickeconomyCurrency": "USD"
+      },
+      {
+        "setNumber": "10236-1",
+        "found": true,
+        "setUrl": "https://www.brickeconomy.com/set/10236-1/lego-star-wars-ewok-village",
+        "brickeconomyValue": 855,
+        "brickeconomyCurrency": "USD"
+      }
+    ]
+  }
 }
