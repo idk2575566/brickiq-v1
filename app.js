@@ -461,6 +461,144 @@ function renderThemeTiles() {
   }).join('');
 }
 
+function safeLabel(text) {
+  return String(text || '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+}
+
+function polar(cx, cy, r, angle) {
+  const rad = (angle - 90) * Math.PI / 180;
+  return { x: cx + (r * Math.cos(rad)), y: cy + (r * Math.sin(rad)) };
+}
+
+function arcPath(cx, cy, r, startAngle, endAngle) {
+  const start = polar(cx, cy, r, startAngle);
+  const end = polar(cx, cy, r, endAngle);
+  const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+  return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y}`;
+}
+
+function renderThemeDonut(rows) {
+  const chartNode = byId('themeDonut');
+  const legendNode = byId('themeLegend');
+  if (!chartNode || !legendNode) return;
+
+  const groups = rows.reduce((acc, row) => {
+    const theme = row.theme || 'Unknown';
+    acc[theme] = (acc[theme] || 0) + (row.marketValue || 0);
+    return acc;
+  }, {});
+
+  const sorted = Object.entries(groups)
+    .map(([theme, value]) => ({ theme, value }))
+    .filter((x) => x.value > 0)
+    .sort((a, b) => b.value - a.value);
+
+  if (!sorted.length) {
+    chartNode.innerHTML = '<p class="chart-empty">No market value data in this filter view.</p>';
+    legendNode.innerHTML = '';
+    return;
+  }
+
+  const top = sorted.slice(0, 5);
+  const remaining = sorted.slice(5).reduce((sum, item) => sum + item.value, 0);
+  if (remaining > 0) top.push({ theme: 'Other themes', value: remaining });
+
+  const totalValue = top.reduce((sum, x) => sum + x.value, 0);
+  const palette = ['#2563eb', '#7c3aed', '#db2777', '#f59e0b', '#10b981', '#64748b'];
+  let angle = 0;
+
+  const segments = top.map((item, index) => {
+    const sweep = (item.value / totalValue) * 360;
+    const startAngle = angle;
+    const endAngle = angle + sweep;
+    angle = endAngle;
+    return { ...item, color: palette[index % palette.length], path: arcPath(110, 110, 80, startAngle, endAngle), pct: (item.value / totalValue) * 100 };
+  });
+
+  chartNode.innerHTML = `
+    <svg viewBox="0 0 220 220" class="ring-svg" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="ringShadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="rgba(15,23,42,.22)"/>
+        </filter>
+        <radialGradient id="ringGlow" cx="40%" cy="35%" r="75%">
+          <stop offset="0%" stop-color="rgba(255,255,255,.88)" />
+          <stop offset="100%" stop-color="rgba(255,255,255,.04)" />
+        </radialGradient>
+      </defs>
+      <circle cx="110" cy="110" r="80" fill="none" stroke="rgba(148,163,184,.2)" stroke-width="26"/>
+      ${segments.map((seg) => `<path d="${seg.path}" stroke="${seg.color}" stroke-width="26" stroke-linecap="round" fill="none" filter="url(#ringShadow)"/>`).join('')}
+      <circle cx="110" cy="110" r="56" fill="url(#ringGlow)" stroke="rgba(148,163,184,.35)" stroke-width="1"/>
+      <text x="110" y="102" text-anchor="middle" class="ring-total-label">${rows.length}</text>
+      <text x="110" y="124" text-anchor="middle" class="ring-total-sub">sets in view</text>
+    </svg>
+  `;
+
+  legendNode.innerHTML = segments.map((seg) => `
+    <div class="legend-row">
+      <span class="legend-dot" style="background:${seg.color}"></span>
+      <span class="legend-name">${safeLabel(seg.theme)}</span>
+      <span class="legend-value">${GBP.format(seg.value)} · ${seg.pct.toFixed(1)}%</span>
+    </div>
+  `).join('');
+}
+
+function renderUpliftRing(rows) {
+  const ringNode = byId('upliftRing');
+  const narrativeNode = byId('upliftNarrative');
+  if (!ringNode || !narrativeNode) return;
+
+  const baseline = total(rows, 'rrpValue');
+  const marketTotal = total(rows, 'marketValue');
+  const uplift = marketTotal - baseline;
+
+  if (!Number.isFinite(baseline) || baseline <= 0 || !Number.isFinite(marketTotal) || marketTotal <= 0) {
+    ringNode.innerHTML = '<p class="chart-empty">Need baseline and market data to render uplift ring.</p>';
+    narrativeNode.textContent = '';
+    return;
+  }
+
+  const positiveUplift = Math.max(0, uplift);
+  const marketBasePortion = Math.max(0, marketTotal - positiveUplift);
+  const upliftRatio = Math.min(1, positiveUplift / marketTotal);
+  const degrees = 360 * upliftRatio;
+
+  ringNode.innerHTML = `
+    <svg viewBox="0 0 220 220" class="ring-svg" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="baseGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#1d4ed8"/>
+          <stop offset="100%" stop-color="#60a5fa"/>
+        </linearGradient>
+        <linearGradient id="upliftGradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#10b981"/>
+          <stop offset="100%" stop-color="#34d399"/>
+        </linearGradient>
+      </defs>
+      <circle cx="110" cy="110" r="82" fill="none" stroke="rgba(148,163,184,.18)" stroke-width="22"/>
+      <circle cx="110" cy="110" r="82" fill="none" stroke="url(#baseGradient)" stroke-width="22"/>
+      <path d="${arcPath(110, 110, 82, 0, Math.max(1, degrees))}" stroke="url(#upliftGradient)" stroke-width="22" stroke-linecap="round" fill="none"/>
+      <circle cx="110" cy="110" r="61" fill="rgba(255,255,255,.95)"/>
+      <text x="110" y="98" text-anchor="middle" class="ring-total-sub">Uplift</text>
+      <text x="110" y="120" text-anchor="middle" class="ring-total-label">${formatSignedPct((uplift / baseline) * 100)}</text>
+      <text x="110" y="140" text-anchor="middle" class="ring-total-sub">vs RRP</text>
+    </svg>
+    <div class="legend-inline">
+      <span><i style="background:#60a5fa"></i>Baseline: ${GBP.format(marketBasePortion)}</span>
+      <span><i style="background:#34d399"></i>Gain: ${GBP.format(positiveUplift)}</span>
+    </div>
+  `;
+
+  narrativeNode.textContent = uplift >= 0
+    ? `${formatSignedPct((uplift / baseline) * 100)} portfolio uplift over baseline in this filtered view.`
+    : `${formatSignedPct((uplift / baseline) * 100)} below baseline in this filtered view.`;
+}
+
+function renderVisuals(rows) {
+  renderThemeDonut(rows);
+  renderUpliftRing(rows);
+}
+
 function renderMobileControls(rows) {
   const themeSelect = byId('mobileThemeFilter');
   if (themeSelect) {
@@ -603,7 +741,7 @@ function renderMobileCards(rows) {
 
 function updateFreshness() {
   const dt = new Date(state.generatedAt);
-  byId('freshness').textContent = `Snapshot freshness: ${dt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}`;
+  byId('freshness').textContent = `Synced ${dt.toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })}`;
 }
 
 function renderGallery(rows) {
@@ -753,6 +891,7 @@ function reRender() {
   const rows = filteredSortedRows();
   renderTable(rows);
   renderConfidence(rows);
+  renderVisuals(rows);
   renderThemeTiles();
   renderMobileControls(state.rows);
 }
@@ -780,19 +919,6 @@ async function loadData() {
     state.rows = valueRows(data.items);
     state.hasBrickEconomyData = state.rows.some((r) => r.hasBrickEconomy);
     state.hasBrickLinkData = state.rows.some((r) => r.hasBrickLink);
-
-    const assumptionBadge = byId('assumptionBadge');
-    if (assumptionBadge) {
-      if (state.hasBrickEconomyData && state.hasBrickLinkData) {
-        assumptionBadge.textContent = 'Using BrickEconomy + BrickLink average where both exist.';
-      } else if (state.hasBrickEconomyData) {
-        assumptionBadge.textContent = 'Using BrickEconomy where available.';
-      } else if (state.hasBrickLinkData) {
-        assumptionBadge.textContent = 'Using BrickLink where available.';
-      } else {
-        assumptionBadge.textContent = 'Using sheet fallback prices for market values.';
-      }
-    }
 
     updateFreshness();
     reRender();

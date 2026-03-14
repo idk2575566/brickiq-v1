@@ -28,11 +28,8 @@
           </div>
         </div>
 
-        <div class="meta-row">
-          <span id="freshness" class="badge"></span>
-          <span class="badge subtle">Source: synced sheet snapshot</span>
-          <span class="badge subtle">Refresh = latest index pull</span>
-          <span class="badge warn" id="assumptionBadge">Computed market pricing active</span>
+        <div class="meta-row" aria-live="polite">
+          <span id="freshness" class="badge freshness-badge"></span>
         </div>
       </header>
 
@@ -42,6 +39,18 @@
         <article class="snapshot-card" aria-labelledby="confidenceTitle">
           <h2 id="confidenceTitle">Confidence at a glance</h2>
           <div id="confidenceBars" class="confidence-bars"></div>
+        </article>
+
+        <article class="snapshot-card chart-card" aria-labelledby="themeDonutTitle">
+          <h2 id="themeDonutTitle">Theme allocation by secondary value</h2>
+          <div id="themeDonut" class="radial-chart" role="img" aria-label="Donut chart showing secondary market value by theme."></div>
+          <div id="themeLegend" class="chart-legend" aria-live="polite"></div>
+        </article>
+
+        <article class="snapshot-card chart-card" aria-labelledby="upliftRingTitle">
+          <h2 id="upliftRingTitle">Value uplift composition</h2>
+          <div id="upliftRing" class="radial-chart" role="img" aria-label="Ring chart showing baseline versus uplift."></div>
+          <p id="upliftNarrative" class="chart-narrative"></p>
         </article>
       </section>
 
