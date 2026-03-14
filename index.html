@@ -32,7 +32,7 @@
           <span id="freshness" class="badge"></span>
           <span class="badge subtle">Source: synced sheet snapshot</span>
           <span class="badge subtle">Refresh = latest index pull</span>
-          <span class="badge warn" id="assumptionBadge">Estimates marked as est.</span>
+          <span class="badge warn" id="assumptionBadge">BrickEconomy market pricing active</span>
         </div>
       </header>
 
@@ -74,11 +74,11 @@
         </select>
         <select id="confidenceFilter">
           <option value="all">All confidence</option>
-          <option value="exact">Non-estimated only</option>
-          <option value="estimated">Contains estimates</option>
+          <option value="exact">Directly mapped only</option>
+          <option value="estimated">Contains inferred fields</option>
         </select>
         <select id="valueBandFilter">
-          <option value="all">All value bands (NIB value)</option>
+          <option value="all">All value bands (market value)</option>
           <option value="low">Under £200</option>
           <option value="mid">£200 to £1000</option>
           <option value="high">Over £1000</option>
@@ -100,10 +100,10 @@
                   <th data-sort="setNumber">Set #</th>
                   <th data-sort="name">Name</th>
                   <th data-sort="qty">Qty</th>
-                  <th data-sort="nibPriceGbp">NIB price</th>
+                  <th data-sort="marketUnit">Market price</th>
                   <th data-sort="usedPriceGbp">Used price</th>
                   <th data-sort="rrpGbp">RRP</th>
-                  <th data-sort="nibValue">NIB value</th>
+                  <th data-sort="marketValue">Market value</th>
                   <th data-sort="usedValue">Used value</th>
                   <th data-sort="rrpValue">RRP value</th>
                   <th data-sort="delta">Δ vs RRP (NIB)</th>
@@ -118,8 +118,8 @@
           <section class="mobile-list-controls" aria-label="Mobile sort and filters">
             <div class="mobile-control-grid">
               <select id="mobileSortSelect">
-                <option value="nibValue:desc">Sort: Market price high → low</option>
-                <option value="nibValue:asc">Sort: Market price low → high</option>
+                <option value="marketValue:desc">Sort: Market price high → low</option>
+                <option value="marketValue:asc">Sort: Market price low → high</option>
                 <option value="name:asc">Sort: Name A → Z</option>
                 <option value="name:desc">Sort: Name Z → A</option>
                 <option value="brickEconomyValue:desc">Sort: BrickEconomy high → low</option>

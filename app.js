@@ -2,7 +2,7 @@ const GBP = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP',
 
 let state = {
   rows: [],
-  sortKey: 'nibValue',
+  sortKey: 'marketValue',
   sortDir: 'desc',
   hasBrickEconomyData: false,
   search: '',
@@ -81,7 +81,9 @@ function valueRows(rows) {
       hasBrickEconomy: be.available,
       brickEconomyUnitGbp: be.unit,
       brickEconomyValue: be.total,
-      brickEconomySource: be.source
+      brickEconomySource: be.source,
+      marketUnit: be.available ? be.unit : null,
+      marketValue: be.available ? be.total : null
     };
   });
 }
@@ -196,10 +198,12 @@ function isEstimatedRow(row) {
 }
 
 function matchValueBand(row, band) {
+  const value = Number.isFinite(row.marketValue) ? row.marketValue : null;
   if (band === 'all') return true;
-  if (band === 'low') return row.nibValue < 200;
-  if (band === 'mid') return row.nibValue >= 200 && row.nibValue <= 1000;
-  if (band === 'high') return row.nibValue > 1000;
+  if (value == null) return false;
+  if (band === 'low') return value < 200;
+  if (band === 'mid') return value >= 200 && value <= 1000;
+  if (band === 'high') return value > 1000;
   return true;
 }
 
@@ -305,9 +309,9 @@ function renderKpis(rows) {
 
 function renderConfidence(rows) {
   const fields = [
-    { key: 'nib', label: 'NIB confidence', pick: (r) => r.estimated?.nib },
-    { key: 'used', label: 'Used confidence', pick: (r) => r.estimated?.used },
-    { key: 'rrp', label: 'RRP confidence', pick: (r) => r.estimated?.rrp }
+    { key: 'nib', label: 'NIB data confidence', pick: (r) => r.estimated?.nib },
+    { key: 'used', label: 'Used data confidence', pick: (r) => r.estimated?.used },
+    { key: 'rrp', label: 'RRP data confidence', pick: (r) => r.estimated?.rrp }
   ];
 
   byId('confidenceBars').innerHTML = fields.map((f) => {
@@ -316,7 +320,7 @@ function renderConfidence(rows) {
     const confidencePct = rows.length ? Math.round((exactCount / rows.length) * 100) : 100;
     return `
       <div class="bar-row">
-        <div class="bar-label"><span>${f.label}</span><strong>${confidencePct}% exact</strong></div>
+        <div class="bar-label"><span>${f.label}</span><strong>${confidencePct}% direct</strong></div>
         <div class="bar-track"><div class="bar-fill" style="width:${confidencePct}%"></div></div>
       </div>
     `;
@@ -373,8 +377,8 @@ function renderMobileControls(rows) {
   const beHint = byId('mobileBrickEconomyHint');
   if (beHint) {
     beHint.textContent = state.hasBrickEconomyData
-      ? 'BrickEconomy estimate sorting available'
-      : 'BrickEconomy estimate unavailable in current snapshot';
+      ? 'BrickEconomy sorting available'
+      : 'BrickEconomy unavailable in current snapshot';
   }
 }
 
@@ -421,9 +425,6 @@ function renderTable(rows) {
   }
 
   tbody.innerHTML = pageRows.map((r) => {
-    const estNib = r.estimated.nib ? '<span class="est">est.</span>' : '';
-    const estUsed = r.estimated.used ? '<span class="est">est.</span>' : '';
-    const estRrp = r.estimated.rrp ? '<span class="est">est.</span>' : '';
     return `
       <tr>
         <td class="set-cell">
@@ -437,10 +438,10 @@ function renderTable(rows) {
           </div>
         </td>
         <td>${r.qty}</td>
-        <td>${GBP.format(r.nibPriceGbp)}${estNib}</td>
-        <td>${GBP.format(r.usedPriceGbp)}${estUsed}</td>
-        <td>${GBP.format(r.rrpGbp)}${estRrp}</td>
-        <td>${GBP.format(r.nibValue)}</td>
+        <td>${r.hasBrickEconomy ? GBP.format(r.brickEconomyUnitGbp) : '—'}</td>
+        <td>${GBP.format(r.usedPriceGbp)}</td>
+        <td>${GBP.format(r.rrpGbp)}</td>
+        <td>${r.hasBrickEconomy ? GBP.format(r.brickEconomyValue) : '—'}</td>
         <td>${GBP.format(r.usedValue)}</td>
         <td>${GBP.format(r.rrpValue)}</td>
         <td class="${r.delta >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(r.delta)}</td>
@@ -459,13 +460,9 @@ function renderMobileCards(rows) {
     return;
   }
 
-  const beUnavailableLabel = '<span class="hint-muted">BrickEconomy estimate n/a</span>';
+  const beUnavailableLabel = '<span class="hint-muted">BrickEconomy price unavailable</span>';
 
   byId('mobileCards').innerHTML = rows.map((r) => {
-    const estNib = r.estimated.nib ? '<span class="est">est.</span>' : '';
-    const beLine = r.hasBrickEconomy
-      ? `<div class="market-alt-line"><label>BrickEconomy est.</label><p>${GBP.format(r.brickEconomyUnitGbp)}</p></div>`
-      : `<div class="market-alt-line">${beUnavailableLabel}</div>`;
     return `
     <article class="set-card" data-detail="${r.setNumber}" role="button" tabindex="0" aria-label="View details for ${r.name}">
       <div class="set-card-top">
@@ -480,9 +477,9 @@ function renderMobileCards(rows) {
           </div>
           <div class="market-price-line">
             <label>Current market price</label>
-            <p>${GBP.format(r.nibPriceGbp)}${estNib}</p>
+            <p>${r.hasBrickEconomy ? GBP.format(r.brickEconomyUnitGbp) : '—'}</p>
           </div>
-          ${beLine}
+          ${!r.hasBrickEconomy ? `<div class="market-alt-line">${beUnavailableLabel}</div>` : ""}
         </div>
       </div>
       ${actionButtons(r)}
@@ -535,7 +532,7 @@ function renderWatchlist() {
     <div class="watch-item">
       <button class="watch-main" data-detail="${r.setNumber}">
         <strong>${r.name}</strong>
-        <span>Set ${r.setNumber} · ${GBP.format(r.nibValue)}</span>
+        <span>Set ${r.setNumber} · ${r.hasBrickEconomy ? GBP.format(r.brickEconomyValue) : '—'}</span>
       </button>
       <button class="chip-btn watch-btn is-on" data-watch="${r.setNumber}">Remove</button>
     </div>
@@ -558,7 +555,7 @@ function renderSnapshotChanges(rows) {
     items = [
       ['Previous snapshot', 'No previous local snapshot yet'],
       ['Set coverage', `${now.setCount} sets tracked`],
-      ['Estimated rows', `${now.estimatedRows} rows contain estimates`]
+      ['Inferred rows', `${now.estimatedRows} rows contain inferred fields`]
     ];
   } else {
     const pct = prev.nib ? (((now.nib - prev.nib) / prev.nib) * 100).toFixed(1) : '0.0';
@@ -567,7 +564,7 @@ function renderSnapshotChanges(rows) {
       ['NIB portfolio move', `${GBP.format(now.nib - prev.nib)} (${pct}%)`],
       ['Used portfolio move', `${GBP.format(now.used - prev.used)}`],
       ['Set count change', `${now.setCount - prev.setCount >= 0 ? '+' : ''}${now.setCount - prev.setCount}`],
-      ['Estimate row change', `${now.estimatedRows - prev.estimatedRows >= 0 ? '+' : ''}${now.estimatedRows - prev.estimatedRows}`]
+      ['Inferred row change', `${now.estimatedRows - prev.estimatedRows >= 0 ? '+' : ''}${now.estimatedRows - prev.estimatedRows}`]
     ];
   }
 
@@ -614,22 +611,20 @@ function openDetail(setNumber) {
         </div>
       </div>
       <div class="product-price">
-        <p class="main">${GBP.format(row.nibValue)}</p>
-        <p class="sub">Portfolio NIB value · Qty ${row.qty}</p>
+        <p class="main">${row.hasBrickEconomy ? GBP.format(row.brickEconomyValue) : '—'}</p>
+        <p class="sub">BrickEconomy market value · Qty ${row.qty}</p>
       </div>
     </section>
 
     <section class="detail-grid">
       <div class="spec-tile"><label>Quantity</label><strong>${row.qty}</strong></div>
-      <div class="spec-tile"><label>NIB unit</label><strong>${GBP.format(row.nibPriceGbp)}</strong></div>
+      <div class="spec-tile"><label>Market unit (BrickEconomy)</label><strong>${row.hasBrickEconomy ? GBP.format(row.brickEconomyUnitGbp) : '—'}</strong></div>
       <div class="spec-tile"><label>Used unit</label><strong>${GBP.format(row.usedPriceGbp)}</strong></div>
       <div class="spec-tile"><label>RRP unit</label><strong>${GBP.format(row.rrpGbp)}</strong></div>
-      <div class="spec-tile"><label>NIB value</label><strong>${GBP.format(row.nibValue)}</strong></div>
-      <div class="spec-tile"><label>BrickEconomy est. unit</label><strong>${row.hasBrickEconomy ? GBP.format(row.brickEconomyUnitGbp) : 'Not in snapshot'}</strong></div>
-      <div class="spec-tile"><label>BrickEconomy est. value</label><strong>${row.hasBrickEconomy ? GBP.format(row.brickEconomyValue) : 'Not in snapshot'}</strong></div>
+      <div class="spec-tile"><label>Market value (BrickEconomy)</label><strong>${row.hasBrickEconomy ? GBP.format(row.brickEconomyValue) : '—'}</strong></div>
       <div class="spec-tile"><label>Delta vs RRP</label><strong class="${row.delta >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(row.delta)}</strong></div>
     </section>
-    ${!state.hasBrickEconomyData ? '<p class="detail-note">BrickEconomy estimates are not present in the current data export. Add a BrickEconomy estimate column in the sheet mapping to fully enable this metric.</p>' : ''}
+    ${!state.hasBrickEconomyData ? '<p class="detail-note">BrickEconomy values are not present in the current data export.</p>' : ''}
   `;
   byId('detailWatchBtn').textContent = isWatchlisted(setNumber) ? 'Remove from Watchlist' : 'Add to Watchlist';
   byId('detailDialog').showModal();
@@ -650,7 +645,7 @@ function reRender() {
 
 function clearFilters() {
   state.search = '';
-  state.sortKey = 'nibValue';
+  state.sortKey = 'marketValue';
   state.sortDir = 'desc';
   state.filters = { ownership: 'all', confidence: 'all', valueBand: 'all', theme: 'all' };
   resetPage();
@@ -674,8 +669,8 @@ async function loadData() {
     const assumptionBadge = byId('assumptionBadge');
     if (assumptionBadge) {
       assumptionBadge.textContent = state.hasBrickEconomyData
-        ? 'BrickEconomy estimates available on supported rows.'
-        : 'BrickEconomy estimates not available in this snapshot.';
+        ? 'BrickEconomy values available on supported rows.'
+        : 'BrickEconomy values not available in this snapshot.';
     }
 
     updateFreshness();

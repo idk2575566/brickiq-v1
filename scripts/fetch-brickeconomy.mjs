@@ -6,12 +6,21 @@ const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..')
 const PORTFOLIO_PATH = path.join(ROOT, 'data', 'portfolio.json');
 const MAX_SETS = Number(process.env.BRICKECONOMY_MAX ?? 20);
 const DELAY_MS = Number(process.env.BRICKECONOMY_DELAY_MS ?? 2500);
+const REMAINING_ONLY = String(process.env.BRICKECONOMY_REMAINING_ONLY ?? '1') !== '0';
+const START_INDEX = Number(process.env.BRICKECONOMY_START_INDEX ?? 0);
+const FETCH_TIMEOUT_MS = Number(process.env.BRICKECONOMY_FETCH_TIMEOUT_MS ?? 20000);
 const USER_AGENT =
   process.env.BRICKECONOMY_USER_AGENT ||
   'BrickIQ-Pilot/0.1 (+local data-enrichment; non-commercial; contact: local-runner)';
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function toNumberOrNull(value) {
+  if (value == null || value === '') return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
 }
 
 function parseMoney(raw) {
@@ -39,6 +48,7 @@ function extractValue(html) {
 
 async function fetchText(url, extraHeaders = {}) {
   const res = await fetch(url, {
+    signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     headers: {
       'user-agent': USER_AGENT,
       accept: 'application/json,text/html,application/xhtml+xml,text/plain,*/*',
@@ -123,7 +133,17 @@ async function main() {
   const portfolio = JSON.parse(raw);
   const items = Array.isArray(portfolio.items) ? portfolio.items : [];
 
-  const uniqueSetNumbers = [...new Set(items.map((i) => i?.setNumber).filter(Boolean))].slice(0, MAX_SETS);
+  const uniqueSetNumbersAll = [...new Set(items.map((i) => i?.setNumber).filter(Boolean))];
+  const unresolvedSetNumbers = uniqueSetNumbersAll.filter((setNumber) => {
+    if (!REMAINING_ONLY) return true;
+    const hit = items.find((i) => i?.setNumber === setNumber);
+    return toNumberOrNull(hit?.brickeconomyValue) == null;
+  });
+
+  const uniqueSetNumbers = unresolvedSetNumbers.slice(
+    Math.max(0, START_INDEX),
+    Math.max(0, START_INDEX) + Math.max(0, MAX_SETS)
+  );
 
   const robots = await checkRobots();
   if (robots.disallowAll) {
@@ -166,6 +186,8 @@ async function main() {
 
   portfolio.brickeconomyPilot = {
     attemptedUniqueSets: uniqueSetNumbers.length,
+    attemptedFromIndex: START_INDEX,
+    remainingOnly: REMAINING_ONLY,
     requestDelayMs: DELAY_MS,
     robotsUrl: robots.robotsUrl,
     generatedAt: new Date().toISOString(),
@@ -181,16 +203,26 @@ async function main() {
 
   const enrichedSets = uniqueSetNumbers.filter((n) => resultBySet.get(n)?.found).length;
   const missingSets = uniqueSetNumbers.length - enrichedSets;
+  const cumulativeEnrichedSets = uniqueSetNumbersAll.filter((setNumber) =>
+    items.some((i) => i?.setNumber === setNumber && toNumberOrNull(i?.brickeconomyValue) != null)
+  ).length;
+  const remainingSetsWithoutBrickEconomy = uniqueSetNumbersAll.length - cumulativeEnrichedSets;
 
   console.log(
     JSON.stringify(
       {
         attemptedSets: uniqueSetNumbers.length,
+        startIndex: START_INDEX,
+        remainingOnly: REMAINING_ONLY,
+        unresolvedSetPool: unresolvedSetNumbers.length,
         enrichedSets,
         missingSets,
         enrichedItems: enrichedCount,
         missingItems: missingCount,
-        delayMs: DELAY_MS
+        delayMs: DELAY_MS,
+        cumulativeEnrichedSets,
+        remainingSetsWithoutBrickEconomy,
+        fetchTimeoutMs: FETCH_TIMEOUT_MS
       },
       null,
       2
