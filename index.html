@@ -20,7 +20,6 @@
             </div>
             <div>
               <h1>BrickIQ</h1>
-              <p class="tagline">Collector intelligence cockpit · GBP valuation index</p>
             </div>
           </div>
           <div class="hero-actions">
@@ -116,6 +115,27 @@
           </section>
 
           <section id="paginationBar" class="pagination-bar" aria-label="Result pagination"></section>
+          <section class="mobile-list-controls" aria-label="Mobile sort and filters">
+            <div class="mobile-control-grid">
+              <select id="mobileSortSelect">
+                <option value="nibValue:desc">Sort: Market price high → low</option>
+                <option value="nibValue:asc">Sort: Market price low → high</option>
+                <option value="name:asc">Sort: Name A → Z</option>
+                <option value="name:desc">Sort: Name Z → A</option>
+                <option value="brickEconomyValue:desc">Sort: BrickEconomy high → low</option>
+              </select>
+              <select id="mobileThemeFilter">
+                <option value="all">All themes</option>
+              </select>
+              <select id="mobileOwnershipFilter">
+                <option value="all">All ownership</option>
+                <option value="owned">Owned</option>
+                <option value="wishlist">Wishlist</option>
+              </select>
+              <button id="mobileClearFiltersBtn" class="chip-btn">Clear</button>
+            </div>
+            <p id="mobileBrickEconomyHint" class="mobile-control-hint"></p>
+          </section>
           <section id="mobileCards" class="mobile-cards" aria-label="Mobile set cards"></section>
         </div>
       </section>

@@ -281,6 +281,27 @@ tr:hover td { background: rgba(255,255,255,.02); }
 .pagination-actions { display: flex; align-items: center; gap: var(--space-2); }
 .pagination-page { color: var(--text); font-size: .88rem; font-weight: 600; }
 
+.mobile-list-controls { display: none; }
+.mobile-control-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+.mobile-control-grid select {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--surface-elev);
+  color: var(--text);
+  font-size: 16px;
+}
+.mobile-control-hint {
+  margin: 8px 2px 0;
+  font-size: .78rem;
+  color: var(--muted);
+}
+
 .mobile-cards { display: none; gap: var(--space-3); }
 .set-card {
   background: var(--card);
@@ -292,11 +313,25 @@ tr:hover td { background: rgba(255,255,255,.02); }
   touch-action: manipulation;
 }
 .set-card:active { transform: scale(.99); }
-.set-card-top { display: flex; gap: var(--space-2); align-items: center; }
+.set-card-top { display: flex; gap: var(--space-2); align-items: stretch; }
+.set-card-media {
+  width: 112px;
+  min-width: 112px;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(15,23,42,.12);
+  background: linear-gradient(145deg, #e7eefc, #d2def4);
+}
+.set-card-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
 .set-card-head { display: grid; gap: 4px; width: 100%; min-width: 0; }
 .set-card-head strong { font-size: .98rem; line-height: 1.35; }
-.market-price-line label { display: block; color: var(--muted); font-size: .72rem; }
-.market-price-line p { margin: 1px 0 0; font-size: 1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.set-card-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.set-card-meta .set-number { font-size: .78rem; color: var(--muted); font-weight: 600; }
+.market-price-line label, .market-alt-line label { display: block; color: var(--muted); font-size: .72rem; }
+.market-price-line p, .market-alt-line p { margin: 1px 0 0; font-size: 1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.market-alt-line p { font-size: .9rem; font-weight: 650; }
+.hint-muted { font-size: .76rem; color: var(--muted); }
 .set-card .row-actions { margin-top: var(--space-2); gap: var(--space-2); }
 .set-card .row-actions .chip-btn { flex: 1; min-width: 44px; }
 
@@ -364,6 +399,7 @@ tr:hover td { background: rgba(255,255,255,.02); }
 }
 .spec-tile label { display: block; font-size: .74rem; color: var(--muted); }
 .spec-tile strong { font-size: 1rem; margin-top: 4px; display: block; }
+.detail-note { margin: var(--space-3) 2px 0; color: var(--muted); font-size: .82rem; }
 
 .detail-footer { margin-top: var(--space-4); display: flex; justify-content: flex-end; }
 .sticky-cta-row {
@@ -423,8 +459,16 @@ tr:hover td { background: rgba(255,255,255,.02); }
   .logo-wrap { width: 62px; height: 62px; }
   .table-wrap { display: none; }
   .pagination-bar { flex-direction: column; align-items: flex-start; }
+  .mobile-list-controls {
+    display: block;
+    margin: 0 0 var(--space-3);
+    padding: var(--space-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255,255,255,.86);
+  }
   .mobile-cards { display: grid; }
-  .set-thumb { width: 52px; height: 52px; border-radius: 10px; }
+  .set-card-media { width: 108px; min-width: 108px; }
   .product-trust-row { flex-direction: column; }
   .product-price { text-align: left; }
   .detail-grid { grid-template-columns: 1fr 1fr; }
@@ -435,7 +479,7 @@ tr:hover td { background: rgba(255,255,255,.02); }
   body { background: #fff !important; color: #0f1729; font-size: 11pt; }
   .app-shell { max-width: none; padding: 8mm; }
   .hero, .kpi, .snapshot-card, .set-card { background: #fff !important; border: 1px solid #d6deea; color: #0f1729; }
-  .hero-actions, .meta-row .badge.subtle, .meta-row .badge.warn, .insight-strip, .snapshot-grid, .watchlist-panel, .controls, .mobile-cards, .toast, .detail-dialog, .theme-tiles-wrap, .pagination-bar { display: none !important; }
+  .hero-actions, .meta-row .badge.subtle, .meta-row .badge.warn, .insight-strip, .snapshot-grid, .watchlist-panel, .controls, .mobile-list-controls, .mobile-cards, .toast, .detail-dialog, .theme-tiles-wrap, .pagination-bar { display: none !important; }
   .kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 5mm; }
   .table-wrap { overflow: visible !important; border: 1px solid #d6deea; background: #fff; }
   table { min-width: 0; width: 100%; table-layout: fixed; }

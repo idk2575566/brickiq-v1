@@ -4,6 +4,7 @@ let state = {
   rows: [],
   sortKey: 'nibValue',
   sortDir: 'desc',
+  hasBrickEconomyData: false,
   search: '',
   filters: {
     ownership: 'all',
@@ -26,14 +27,63 @@ const byId = (id) => document.getElementById(id);
 const SNAPSHOT_KEY = 'brickiq:lastSnapshot';
 const WATCHLIST_KEY = 'brickiq:watchlist';
 
+const BRICKECONOMY_UNIT_KEYS = [
+  'brickEconomyEstimateGbp',
+  'brickEconomyValueGbp',
+  'brickEconomyPriceGbp',
+  'brickEconomyEstimate',
+  'brickEconomyValue',
+  'brickEconomyPrice',
+  'brickeconomyEstimateGbp',
+  'brickeconomyValueGbp',
+  'brickeconomyPriceGbp',
+  'brickeconomyEstimate',
+  'brickeconomyValue',
+  'brickeconomyPrice'
+];
+
+function toNumberOrNull(v) {
+  if (v == null || v === '') return null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+function pickFirstNumber(obj, keys) {
+  for (const key of keys) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      const parsed = toNumberOrNull(obj[key]);
+      if (parsed != null) return { key, value: parsed };
+    }
+  }
+  return null;
+}
+
+function extractBrickEconomy(row) {
+  const unit = pickFirstNumber(row, BRICKECONOMY_UNIT_KEYS);
+  if (!unit) return { available: false, unit: null, total: null, source: null };
+  return {
+    available: true,
+    unit: unit.value,
+    total: (toNumberOrNull(row.qty) || 0) * unit.value,
+    source: unit.key
+  };
+}
+
 function valueRows(rows) {
-  return rows.map((r) => ({
-    ...r,
-    nibValue: r.qty * r.nibPriceGbp,
-    usedValue: r.qty * r.usedPriceGbp,
-    rrpValue: r.qty * r.rrpGbp,
-    delta: r.qty * (r.nibPriceGbp - r.rrpGbp)
-  }));
+  return rows.map((r) => {
+    const be = extractBrickEconomy(r);
+    return {
+      ...r,
+      nibValue: r.qty * r.nibPriceGbp,
+      usedValue: r.qty * r.usedPriceGbp,
+      rrpValue: r.qty * r.rrpGbp,
+      delta: r.qty * (r.nibPriceGbp - r.rrpGbp),
+      hasBrickEconomy: be.available,
+      brickEconomyUnitGbp: be.unit,
+      brickEconomyValue: be.total,
+      brickEconomySource: be.source
+    };
+  });
 }
 
 const total = (rows, key) => rows.reduce((sum, r) => sum + (r[key] || 0), 0);
@@ -198,7 +248,16 @@ function filteredSortedRows() {
   rows.sort((a, b) => {
     const av = a[state.sortKey];
     const bv = b[state.sortKey];
-    const cmp = typeof av === 'string' ? String(av).localeCompare(String(bv)) : av - bv;
+
+    let cmp = 0;
+    if (typeof av === 'string' || typeof bv === 'string') {
+      cmp = String(av ?? '').localeCompare(String(bv ?? ''));
+    } else {
+      const na = Number.isFinite(av) ? av : Number.NEGATIVE_INFINITY;
+      const nb = Number.isFinite(bv) ? bv : Number.NEGATIVE_INFINITY;
+      cmp = na - nb;
+    }
+
     return state.sortDir === 'asc' ? cmp : -cmp;
   });
 
@@ -291,6 +350,34 @@ function renderThemeTiles() {
   }).join('');
 }
 
+function renderMobileControls(rows) {
+  const themeSelect = byId('mobileThemeFilter');
+  if (themeSelect) {
+    const themes = [...new Set(rows.map((r) => r.theme || 'Unknown'))].sort((a, b) => a.localeCompare(b));
+    const current = state.filters.theme;
+    themeSelect.innerHTML = [
+      '<option value="all">All themes</option>',
+      ...themes.map((theme) => `<option value="${theme}">${theme}</option>`)
+    ].join('');
+    themeSelect.value = themes.includes(current) || current === 'all' ? current : 'all';
+  }
+
+  const ownershipSelect = byId('mobileOwnershipFilter');
+  if (ownershipSelect) ownershipSelect.value = state.filters.ownership;
+  const desktopOwnership = byId('ownershipFilter');
+  if (desktopOwnership) desktopOwnership.value = state.filters.ownership;
+
+  const sortSelect = byId('mobileSortSelect');
+  if (sortSelect) sortSelect.value = `${state.sortKey}:${state.sortDir}`;
+
+  const beHint = byId('mobileBrickEconomyHint');
+  if (beHint) {
+    beHint.textContent = state.hasBrickEconomyData
+      ? 'BrickEconomy estimate sorting available'
+      : 'BrickEconomy estimate unavailable in current snapshot';
+  }
+}
+
 function renderPagination(totalRows) {
   const totalPages = pageCount(totalRows);
   const current = Math.min(state.pagination.page, totalPages);
@@ -372,18 +459,30 @@ function renderMobileCards(rows) {
     return;
   }
 
+  const beUnavailableLabel = '<span class="hint-muted">BrickEconomy estimate n/a</span>';
+
   byId('mobileCards').innerHTML = rows.map((r) => {
     const estNib = r.estimated.nib ? '<span class="est">est.</span>' : '';
+    const beLine = r.hasBrickEconomy
+      ? `<div class="market-alt-line"><label>BrickEconomy est.</label><p>${GBP.format(r.brickEconomyUnitGbp)}</p></div>`
+      : `<div class="market-alt-line">${beUnavailableLabel}</div>`;
     return `
     <article class="set-card" data-detail="${r.setNumber}" role="button" tabindex="0" aria-label="View details for ${r.name}">
       <div class="set-card-top">
-        <img class="set-thumb" loading="lazy" decoding="async" src="${imageUrlForSet(r.setNumber)}" alt="${r.name} thumbnail" onerror="this.onerror=null;this.src='${placeholderImage(r.setNumber)}';" />
+        <div class="set-card-media">
+          <img class="set-card-thumb" loading="lazy" decoding="async" src="${imageUrlForSet(r.setNumber)}" alt="${r.name} thumbnail" onerror="this.onerror=null;this.src='${placeholderImage(r.setNumber)}';" />
+        </div>
         <div class="set-card-head">
           <strong>${r.name}</strong>
+          <div class="set-card-meta">
+            <span class="set-number">Set ${r.setNumber}</span>
+            <img class="theme-badge" loading="lazy" decoding="async" src="${themeBadgeDataUrl(r.theme, true)}" alt="${r.theme || 'Theme'} badge" />
+          </div>
           <div class="market-price-line">
             <label>Current market price</label>
             <p>${GBP.format(r.nibPriceGbp)}${estNib}</p>
           </div>
+          ${beLine}
         </div>
       </div>
       ${actionButtons(r)}
@@ -526,8 +625,11 @@ function openDetail(setNumber) {
       <div class="spec-tile"><label>Used unit</label><strong>${GBP.format(row.usedPriceGbp)}</strong></div>
       <div class="spec-tile"><label>RRP unit</label><strong>${GBP.format(row.rrpGbp)}</strong></div>
       <div class="spec-tile"><label>NIB value</label><strong>${GBP.format(row.nibValue)}</strong></div>
+      <div class="spec-tile"><label>BrickEconomy est. unit</label><strong>${row.hasBrickEconomy ? GBP.format(row.brickEconomyUnitGbp) : 'Not in snapshot'}</strong></div>
+      <div class="spec-tile"><label>BrickEconomy est. value</label><strong>${row.hasBrickEconomy ? GBP.format(row.brickEconomyValue) : 'Not in snapshot'}</strong></div>
       <div class="spec-tile"><label>Delta vs RRP</label><strong class="${row.delta >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(row.delta)}</strong></div>
     </section>
+    ${!state.hasBrickEconomyData ? '<p class="detail-note">BrickEconomy estimates are not present in the current data export. Add a BrickEconomy estimate column in the sheet mapping to fully enable this metric.</p>' : ''}
   `;
   byId('detailWatchBtn').textContent = isWatchlisted(setNumber) ? 'Remove from Watchlist' : 'Add to Watchlist';
   byId('detailDialog').showModal();
@@ -543,10 +645,13 @@ function reRender() {
   renderGallery(rows);
   renderConfidence(rows);
   renderThemeTiles();
+  renderMobileControls(state.rows);
 }
 
 function clearFilters() {
   state.search = '';
+  state.sortKey = 'nibValue';
+  state.sortDir = 'desc';
   state.filters = { ownership: 'all', confidence: 'all', valueBand: 'all', theme: 'all' };
   resetPage();
   byId('searchInput').value = '';
@@ -564,6 +669,14 @@ async function loadData() {
     state.generatedAt = data.generatedAt;
     state.assumptions = data.assumptions;
     state.rows = valueRows(data.items);
+    state.hasBrickEconomyData = state.rows.some((r) => r.hasBrickEconomy);
+
+    const assumptionBadge = byId('assumptionBadge');
+    if (assumptionBadge) {
+      assumptionBadge.textContent = state.hasBrickEconomyData
+        ? 'BrickEconomy estimates available on supported rows.'
+        : 'BrickEconomy estimates not available in this snapshot.';
+    }
 
     updateFreshness();
     reRender();
@@ -600,6 +713,29 @@ byId('valueBandFilter').addEventListener('change', (e) => {
 });
 
 byId('clearFiltersBtn').addEventListener('click', clearFilters);
+
+byId('mobileOwnershipFilter')?.addEventListener('change', (e) => {
+  state.filters.ownership = e.target.value;
+  resetPage();
+  reRender();
+});
+
+byId('mobileThemeFilter')?.addEventListener('change', (e) => {
+  state.filters.theme = e.target.value;
+  resetPage();
+  reRender();
+});
+
+byId('mobileSortSelect')?.addEventListener('change', (e) => {
+  const [sortKey, sortDir] = String(e.target.value || '').split(':');
+  if (!sortKey || !sortDir) return;
+  state.sortKey = sortKey;
+  state.sortDir = sortDir;
+  resetPage();
+  reRender();
+});
+
+byId('mobileClearFiltersBtn')?.addEventListener('click', clearFilters);
 
 byId('printBtn').addEventListener('click', () => window.print());
 
