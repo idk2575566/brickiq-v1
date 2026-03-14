@@ -40,6 +40,65 @@ const total = (rows, key) => rows.reduce((sum, r) => sum + (r[key] || 0), 0);
 
 const imageUrlForSet = (setNumber) => `https://images.brickset.com/sets/images/${encodeURIComponent(setNumber)}.jpg`;
 
+const THEME_BADGE_META = {
+  all: { label: 'All', palette: ['#4f46e5', '#22d3ee'] },
+  'star wars': { label: 'Star', palette: ['#0f172a', '#334155'] },
+  'marvel super heroes': { label: 'Hero', palette: ['#991b1b', '#ef4444'] },
+  'dc comics super heroes': { label: 'Hero', palette: ['#1d4ed8', '#38bdf8'] },
+  ninjago: { label: 'Ninja', palette: ['#14532d', '#22c55e'] },
+  city: { label: 'City', palette: ['#1e3a8a', '#60a5fa'] },
+  creator: { label: 'Create', palette: ['#7c3aed', '#a78bfa'] },
+  creators: { label: 'Create', palette: ['#7c3aed', '#a78bfa'] },
+  ideas: { label: 'Ideas', palette: ['#0f766e', '#2dd4bf'] },
+  architecture: { label: 'Arch', palette: ['#374151', '#9ca3af'] },
+  technic: { label: 'Tech', palette: ['#7f1d1d', '#fb7185'] },
+  speed: { label: 'Speed', palette: ['#9a3412', '#fb923c'] },
+  friends: { label: 'Friends', palette: ['#be185d', '#f472b6'] },
+  icons: { label: 'Icons', palette: ['#0f766e', '#67e8f9'] },
+  creator3in1: { label: '3in1', palette: ['#6d28d9', '#22d3ee'] },
+  disney: { label: 'Disney', palette: ['#1d4ed8', '#60a5fa'] },
+  harrypotter: { label: 'Wizard', palette: ['#6b21a8', '#c084fc'] },
+  minecraft: { label: 'Craft', palette: ['#14532d', '#86efac'] },
+  'the lord of the rings': { label: 'Fantasy', palette: ['#4d7c0f', '#a3e635'] },
+  'pirates of the caribbean': { label: 'Pirates', palette: ['#7c2d12', '#fb923c'] }
+};
+
+function normalizeTheme(theme) {
+  return String(theme || 'Unknown').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+function themeBadgeSpec(theme) {
+  const normalized = normalizeTheme(theme);
+  const compact = normalized.replace(/\s+/g, '');
+  const known = THEME_BADGE_META[normalized] || THEME_BADGE_META[compact];
+  if (known) return known;
+
+  const words = String(theme || 'Theme').split(/\s+/).filter(Boolean).slice(0, 2);
+  const label = words.length > 1 ? words.map((w) => w[0]).join('').toUpperCase() : words.join('').slice(0, 6);
+  return { label, palette: ['#334155', '#64748b'] };
+}
+
+function themeBadgeDataUrl(theme, small = false) {
+  const spec = themeBadgeSpec(theme);
+  const [c1, c2] = spec.palette;
+  const w = small ? 96 : 136;
+  const h = small ? 28 : 38;
+  const fs = small ? 13 : 15;
+  const svg = `
+    <svg xmlns='http://www.w3.org/2000/svg' width='${w}' height='${h}' viewBox='0 0 ${w} ${h}'>
+      <defs>
+        <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+          <stop offset='0%' stop-color='${c1}'/>
+          <stop offset='100%' stop-color='${c2}'/>
+        </linearGradient>
+      </defs>
+      <rect x='1' y='1' width='${w - 2}' height='${h - 2}' rx='${small ? 12 : 15}' fill='url(#g)' stroke='rgba(255,255,255,0.45)'/>
+      <circle cx='${small ? 14 : 18}' cy='${h / 2}' r='${small ? 3.5 : 4}' fill='rgba(255,255,255,0.9)'/>
+      <text x='${small ? 24 : 30}' y='${small ? 18 : 24}' fill='white' font-size='${fs}' font-family='Inter,Arial,sans-serif' font-weight='700' letter-spacing='.4'>${spec.label}</text>
+    </svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
 function placeholderImage(setNumber) {
   const safeSet = String(setNumber || 'LEGO');
   const svg = `
@@ -221,7 +280,10 @@ function renderThemeTiles() {
     const label = t.theme === 'all' ? 'All themes' : t.theme;
     return `
       <button class="theme-tile ${active ? 'active' : ''}" data-theme="${t.theme}" role="listitem">
-        <strong>${label}</strong>
+        <div class="theme-tile-head">
+          <img class="theme-badge" loading="lazy" decoding="async" src="${themeBadgeDataUrl(label, true)}" alt="${label} badge" />
+          <strong>${label}</strong>
+        </div>
         <span>${t.count} sets</span>
         <em>${GBP.format(t.nibValue)}</em>
       </button>
@@ -277,8 +339,16 @@ function renderTable(rows) {
     const estRrp = r.estimated.rrp ? '<span class="est">est.</span>' : '';
     return `
       <tr>
-        <td>${r.setNumber}</td>
-        <td>${r.name}<div class="row-sub">${r.theme || 'Theme n/a'} · ${ownershipLabel(r)}</div></td>
+        <td class="set-cell">
+          <img class="set-thumb" loading="lazy" decoding="async" src="${imageUrlForSet(r.setNumber)}" alt="Set ${r.setNumber}" onerror="this.onerror=null;this.src='${placeholderImage(r.setNumber)}';" />
+          <span>${r.setNumber}</span>
+        </td>
+        <td>
+          <div class="name-cell">
+            <div>${r.name}<div class="row-sub">${r.theme || 'Theme n/a'} · ${ownershipLabel(r)}</div></div>
+            <img class="theme-badge row-badge" loading="lazy" decoding="async" src="${themeBadgeDataUrl(r.theme, true)}" alt="${r.theme || 'Theme'} badge" />
+          </div>
+        </td>
         <td>${r.qty}</td>
         <td>${GBP.format(r.nibPriceGbp)}${estNib}</td>
         <td>${GBP.format(r.usedPriceGbp)}${estUsed}</td>
@@ -304,9 +374,13 @@ function renderMobileCards(rows) {
 
   byId('mobileCards').innerHTML = rows.map((r) => `
     <article class="set-card" data-detail="${r.setNumber}">
-      <div class="set-card-head">
-        <strong>${r.name}</strong>
-        <span>Set ${r.setNumber}</span>
+      <div class="set-card-top">
+        <img class="set-thumb" loading="lazy" decoding="async" src="${imageUrlForSet(r.setNumber)}" alt="Set ${r.setNumber}" onerror="this.onerror=null;this.src='${placeholderImage(r.setNumber)}';" />
+        <div class="set-card-head">
+          <strong>${r.name}</strong>
+          <span>Set ${r.setNumber}</span>
+          <img class="theme-badge row-badge" loading="lazy" decoding="async" src="${themeBadgeDataUrl(r.theme, true)}" alt="${r.theme || 'Theme'} badge" />
+        </div>
       </div>
       <div class="set-card-grid">
         <div><label>Status</label><p>${ownershipLabel(r)}</p></div>
@@ -337,7 +411,7 @@ function renderGallery(rows) {
     const onList = isWatchlisted(r.setNumber);
     return `
     <article class="story-card" data-detail="${r.setNumber}">
-      <img loading="lazy" src="${imageUrlForSet(r.setNumber)}" alt="LEGO set ${r.setNumber}: ${r.name}" onerror="this.onerror=null;this.src='${fallback}';" />
+      <img loading="lazy" decoding="async" src="${imageUrlForSet(r.setNumber)}" alt="LEGO set ${r.setNumber}: ${r.name}" onerror="this.onerror=null;this.src='${fallback}';" />
       <div class="story-meta">
         <p class="title">${r.name}</p>
         <p class="set">Set ${r.setNumber} · Qty ${r.qty} · ${ownershipLabel(r)}</p>
@@ -429,7 +503,7 @@ function openDetail(setNumber) {
   const fallback = placeholderImage(row.setNumber);
   byId('detailBody').innerHTML = `
     <div class="detail-head">
-      <img src="${imageUrlForSet(row.setNumber)}" alt="${row.name}" onerror="this.onerror=null;this.src='${fallback}';" />
+      <img loading="lazy" decoding="async" src="${imageUrlForSet(row.setNumber)}" alt="${row.name}" onerror="this.onerror=null;this.src='${fallback}';" />
       <div>
         <h3>${row.name}</h3>
         <p>Set ${row.setNumber} · ${row.theme || 'Theme n/a'} · ${ownershipLabel(row)}</p>
