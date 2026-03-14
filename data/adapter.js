@@ -10,7 +10,11 @@ export const DATA_ADAPTER = {
   mapping: {
     setNumber: 'Number + Variant => `${Number}-${Variant}`',
     setName: 'SetName',
-    qty: 'QtyOwned (fallback: 1)',
+    qtyOwned: 'QtyOwned (fallback: 1)',
+    qtyWanted: 'QtyWanted (fallback: 0)',
+    ownershipOwned: 'Own OR QtyOwned > 0',
+    ownershipWishlist: 'Want OR QtyWanted > 0',
+    ownershipStatus: 'owned | wishlist | both | unknown',
     nibPriceGbp: 'BrickLinkSoldPriceNew',
     usedPriceGbp: 'BrickLinkSoldPriceUsed',
     rrpGbp: 'UKRetailPrice (fallback: USRetailPrice)'
@@ -23,6 +27,7 @@ export const DATA_ADAPTER = {
   caveats: [
     'Sheet export does not explicitly specify currency for BrickLinkSoldPrice fields in this extract; app assumes GBP display context.',
     'Rows with missing QtyOwned are treated as quantity=1 for conservative inclusion.',
-    'Estimated fields are flagged in UI as est.'
+    'Estimated fields are flagged in UI as est.',
+    'In the current snapshot, most rows resolve to owned due to QtyOwned > 0 and Own = X; wishlist handling remains active for future rows with Want/QtyWanted.'
   ]
 };

@@ -5,7 +5,12 @@ let state = {
   sortKey: 'nibValue',
   sortDir: 'desc',
   search: '',
-  filter: 'all',
+  filters: {
+    ownership: 'all',
+    confidence: 'all',
+    valueBand: 'all',
+    theme: 'all'
+  },
   generatedAt: null,
   assumptions: [],
   watchlist: [],
@@ -27,13 +32,9 @@ function valueRows(rows) {
   }));
 }
 
-function total(rows, key) {
-  return rows.reduce((sum, r) => sum + (r[key] || 0), 0);
-}
+const total = (rows, key) => rows.reduce((sum, r) => sum + (r[key] || 0), 0);
 
-function imageUrlForSet(setNumber) {
-  return `https://images.brickset.com/sets/images/${encodeURIComponent(setNumber)}.jpg`;
-}
+const imageUrlForSet = (setNumber) => `https://images.brickset.com/sets/images/${encodeURIComponent(setNumber)}.jpg`;
 
 function placeholderImage(setNumber) {
   const safeSet = String(setNumber || 'LEGO');
@@ -68,24 +69,77 @@ function safeSave(key, payload) {
   try { localStorage.setItem(key, JSON.stringify(payload)); } catch {}
 }
 
-function isWatchlisted(setNumber) {
-  return state.watchlist.includes(String(setNumber));
+const isWatchlisted = (setNumber) => state.watchlist.includes(String(setNumber));
+
+function ownershipLabel(row) {
+  if (row.ownershipStatus === 'both') return 'Owned + Wishlist';
+  if (row.ownershipStatus === 'wishlist') return 'Wishlist';
+  if (row.ownershipStatus === 'owned') return 'Owned';
+  return 'Unknown';
 }
 
-function toggleWatchlist(setNumber) {
-  const id = String(setNumber);
-  if (state.watchlist.includes(id)) {
-    state.watchlist = state.watchlist.filter((v) => v !== id);
-    toast(`Removed Set ${id} from watchlist`);
-  } else {
-    state.watchlist = [id, ...state.watchlist];
-    toast(`Added Set ${id} to watchlist`);
+function isEstimatedRow(row) {
+  return row.estimated?.nib || row.estimated?.used || row.estimated?.rrp;
+}
+
+function matchValueBand(row, band) {
+  if (band === 'all') return true;
+  if (band === 'low') return row.nibValue < 200;
+  if (band === 'mid') return row.nibValue >= 200 && row.nibValue <= 1000;
+  if (band === 'high') return row.nibValue > 1000;
+  return true;
+}
+
+function matchOwnership(row, ownership) {
+  if (ownership === 'all') return true;
+  if (ownership === 'owned') return row.hasOwned;
+  if (ownership === 'wishlist') return row.hasWishlist;
+  return true;
+}
+
+function scoreSearch(row, q) {
+  const tokens = q.toLowerCase().split(/\s+/).filter(Boolean);
+  if (!tokens.length) return 1;
+  let score = 0;
+  for (const t of tokens) {
+    if (String(row.setNumber).toLowerCase() === t) score += 8;
+    if (String(row.setNumber).toLowerCase().includes(t)) score += 6;
+    if (String(row.name).toLowerCase().includes(t)) score += 5;
+    if (String(row.theme).toLowerCase().includes(t)) score += 4;
+    if (ownershipLabel(row).toLowerCase().includes(t)) score += 3;
+    if ((row.tags || []).join(' ').toLowerCase().includes(t)) score += 2;
   }
-  safeSave(WATCHLIST_KEY, state.watchlist);
-  renderWatchlist();
-  renderTable();
-  renderGallery(filteredSortedRows());
-  renderMobileCards();
+  return score;
+}
+
+function filteredSortedRows() {
+  let rows = [...state.rows];
+
+  rows = rows.filter((r) => matchOwnership(r, state.filters.ownership));
+
+  if (state.filters.confidence === 'estimated') rows = rows.filter(isEstimatedRow);
+  if (state.filters.confidence === 'exact') rows = rows.filter((r) => !isEstimatedRow(r));
+
+  rows = rows.filter((r) => matchValueBand(r, state.filters.valueBand));
+
+  if (state.filters.theme !== 'all') rows = rows.filter((r) => (r.theme || 'Unknown') === state.filters.theme);
+
+  if (state.search) {
+    rows = rows
+      .map((r) => ({ row: r, score: scoreSearch(r, state.search) }))
+      .filter(({ score }) => score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map(({ row }) => row);
+  }
+
+  rows.sort((a, b) => {
+    const av = a[state.sortKey];
+    const bv = b[state.sortKey];
+    const cmp = typeof av === 'string' ? String(av).localeCompare(String(bv)) : av - bv;
+    return state.sortDir === 'asc' ? cmp : -cmp;
+  });
+
+  return rows;
 }
 
 function renderKpis(rows) {
@@ -132,23 +186,28 @@ function renderConfidence(rows) {
   }).join('');
 }
 
-function filteredSortedRows() {
-  let rows = [...state.rows];
-  if (state.search) {
-    const q = state.search.toLowerCase();
-    rows = rows.filter(r => `${r.setNumber} ${r.name} ${r.theme}`.toLowerCase().includes(q));
-  }
-  if (state.filter === 'estimated') {
-    rows = rows.filter(r => r.estimated.nib || r.estimated.used || r.estimated.rrp);
-  }
+function renderThemeTiles() {
+  const groups = state.rows.reduce((acc, row) => {
+    const theme = row.theme || 'Unknown';
+    acc[theme] = acc[theme] || { theme, count: 0, nibValue: 0 };
+    acc[theme].count += 1;
+    acc[theme].nibValue += row.nibValue;
+    return acc;
+  }, {});
 
-  rows.sort((a, b) => {
-    const av = a[state.sortKey];
-    const bv = b[state.sortKey];
-    const cmp = typeof av === 'string' ? av.localeCompare(bv) : av - bv;
-    return state.sortDir === 'asc' ? cmp : -cmp;
-  });
-  return rows;
+  const tiles = [{ theme: 'all', count: state.rows.length, nibValue: total(state.rows, 'nibValue') }, ...Object.values(groups).sort((a, b) => b.count - a.count)];
+
+  byId('themeTiles').innerHTML = tiles.map((t) => {
+    const active = state.filters.theme === t.theme;
+    const label = t.theme === 'all' ? 'All themes' : t.theme;
+    return `
+      <button class="theme-tile ${active ? 'active' : ''}" data-theme="${t.theme}" role="listitem">
+        <strong>${label}</strong>
+        <span>${t.count} sets</span>
+        <em>${GBP.format(t.nibValue)}</em>
+      </button>
+    `;
+  }).join('');
 }
 
 function renderEmptyState(targetId, title, subtitle) {
@@ -183,7 +242,7 @@ function renderTable() {
     return `
       <tr>
         <td>${r.setNumber}</td>
-        <td>${r.name}</td>
+        <td>${r.name}<div class="row-sub">${r.theme || 'Theme n/a'} · ${ownershipLabel(r)}</div></td>
         <td>${r.qty}</td>
         <td>${GBP.format(r.nibPriceGbp)}${estNib}</td>
         <td>${GBP.format(r.usedPriceGbp)}${estUsed}</td>
@@ -214,9 +273,9 @@ function renderMobileCards() {
         <span>Set ${r.setNumber}</span>
       </div>
       <div class="set-card-grid">
+        <div><label>Status</label><p>${ownershipLabel(r)}</p></div>
         <div><label>Qty</label><p>${r.qty}</p></div>
         <div><label>NIB</label><p>${GBP.format(r.nibPriceGbp)}</p></div>
-        <div><label>Used</label><p>${GBP.format(r.usedPriceGbp)}</p></div>
         <div><label>Δ vs RRP</label><p class="${r.delta >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(r.delta)}</p></div>
       </div>
       ${actionButtons(r)}
@@ -245,7 +304,7 @@ function renderGallery(rows) {
       <img loading="lazy" src="${imageUrlForSet(r.setNumber)}" alt="LEGO set ${r.setNumber}: ${r.name}" onerror="this.onerror=null;this.src='${fallback}';" />
       <div class="story-meta">
         <p class="title">${r.name}</p>
-        <p class="set">Set ${r.setNumber} · Qty ${r.qty}</p>
+        <p class="set">Set ${r.setNumber} · Qty ${r.qty} · ${ownershipLabel(r)}</p>
         <p class="delta">Momentum ${GBP.format(r.delta)} vs RRP</p>
       </div>
       <button class="chip-btn watch-btn ${onList ? 'is-on' : ''}" data-watch="${r.setNumber}">${onList ? 'Watching' : 'Add to Watchlist'}</button>
@@ -281,7 +340,7 @@ function renderSnapshotChanges(rows) {
     setCount: rows.length,
     nib: total(rows, 'nibValue'),
     used: total(rows, 'usedValue'),
-    estimatedRows: rows.filter((r) => r.estimated.nib || r.estimated.used || r.estimated.rrp).length
+    estimatedRows: rows.filter(isEstimatedRow).length
   };
 
   const prev = safeLoad(SNAPSHOT_KEY, null);
@@ -337,7 +396,7 @@ function openDetail(setNumber) {
       <img src="${imageUrlForSet(row.setNumber)}" alt="${row.name}" onerror="this.onerror=null;this.src='${fallback}';" />
       <div>
         <h3>${row.name}</h3>
-        <p>Set ${row.setNumber} · ${row.theme || 'Theme n/a'}</p>
+        <p>Set ${row.setNumber} · ${row.theme || 'Theme n/a'} · ${ownershipLabel(row)}</p>
       </div>
     </div>
     <div class="detail-grid">
@@ -357,6 +416,24 @@ function closeDetail() {
   byId('detailDialog').close();
 }
 
+function reRender() {
+  const rows = filteredSortedRows();
+  renderTable();
+  renderGallery(rows);
+  renderConfidence(rows);
+  renderThemeTiles();
+}
+
+function clearFilters() {
+  state.search = '';
+  state.filters = { ownership: 'all', confidence: 'all', valueBand: 'all', theme: 'all' };
+  byId('searchInput').value = '';
+  byId('ownershipFilter').value = 'all';
+  byId('confidenceFilter').value = 'all';
+  byId('valueBandFilter').value = 'all';
+  reRender();
+}
+
 async function loadData() {
   try {
     skeletons(true);
@@ -367,9 +444,7 @@ async function loadData() {
     state.rows = valueRows(data.items);
 
     updateFreshness();
-    renderTable();
-    renderGallery(state.rows);
-    renderConfidence(state.rows);
+    reRender();
     renderSnapshotChanges(state.rows);
     renderWatchlist();
   } finally {
@@ -380,15 +455,27 @@ async function loadData() {
 
 byId('searchInput').addEventListener('input', (e) => {
   state.search = e.target.value.trim();
-  renderTable();
-  renderGallery(filteredSortedRows());
+  reRender();
 });
 
-byId('filterSelect').addEventListener('change', (e) => {
-  state.filter = e.target.value;
-  renderTable();
-  renderGallery(filteredSortedRows());
+byId('ownershipFilter').addEventListener('change', (e) => {
+  state.filters.ownership = e.target.value;
+  reRender();
 });
+
+byId('confidenceFilter').addEventListener('change', (e) => {
+  state.filters.confidence = e.target.value;
+  reRender();
+});
+
+byId('valueBandFilter').addEventListener('change', (e) => {
+  state.filters.valueBand = e.target.value;
+  reRender();
+});
+
+byId('clearFiltersBtn').addEventListener('click', clearFilters);
+
+byId('printBtn').addEventListener('click', () => window.print());
 
 byId('refreshBtn').addEventListener('click', async () => {
   byId('refreshBtn').textContent = 'Refreshing...';
@@ -409,18 +496,35 @@ document.querySelectorAll('#setsTable th[data-sort]').forEach((th) => {
 });
 
 document.addEventListener('click', (e) => {
+  const tile = e.target.closest('[data-theme]');
+  if (tile) {
+    state.filters.theme = tile.dataset.theme;
+    reRender();
+    return;
+  }
+
   const watch = e.target.closest('[data-watch]');
   if (watch) {
     e.preventDefault();
     e.stopPropagation();
-    toggleWatchlist(watch.dataset.watch);
+    const id = String(watch.dataset.watch);
+    if (state.watchlist.includes(id)) {
+      state.watchlist = state.watchlist.filter((v) => v !== id);
+      toast(`Removed Set ${id} from watchlist`);
+    } else {
+      state.watchlist = [id, ...state.watchlist];
+      toast(`Added Set ${id} to watchlist`);
+    }
+    safeSave(WATCHLIST_KEY, state.watchlist);
+    renderWatchlist();
+    renderTable();
+    renderGallery(filteredSortedRows());
+    renderMobileCards();
     return;
   }
 
   const detail = e.target.closest('[data-detail]');
-  if (detail) {
-    openDetail(detail.dataset.detail);
-  }
+  if (detail) openDetail(detail.dataset.detail);
 });
 
 byId('detailClose').addEventListener('click', closeDetail);
@@ -433,8 +537,13 @@ byId('detailDialog').addEventListener('click', (e) => {
 
 byId('detailWatchBtn').addEventListener('click', () => {
   if (!state.selectedSet) return;
-  toggleWatchlist(state.selectedSet.setNumber);
+  const id = String(state.selectedSet.setNumber);
+  if (state.watchlist.includes(id)) state.watchlist = state.watchlist.filter((v) => v !== id);
+  else state.watchlist = [id, ...state.watchlist];
+  safeSave(WATCHLIST_KEY, state.watchlist);
   byId('detailWatchBtn').textContent = isWatchlisted(state.selectedSet.setNumber) ? 'Remove from Watchlist' : 'Add to Watchlist';
+  renderWatchlist();
+  renderTable();
 });
 
 state.watchlist = safeLoad(WATCHLIST_KEY, []);

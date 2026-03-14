@@ -16,9 +16,16 @@ for (const viewport of [
     await page.goto(baseURL, { waitUntil: 'networkidle' });
     await expect(page.locator('h1')).toHaveText('BrickIQ');
     await expect(page.locator('#kpis .kpi')).toHaveCount(5);
+    await expect(page.locator('#themeTiles .theme-tile').first()).toBeVisible();
+
     await page.locator('#searchInput').fill('Star Wars');
-    const filteredRows = page.locator('#setsTable tbody tr');
-    await expect(filteredRows.first()).toBeVisible();
+    await expect(page.locator('#setsTable tbody tr').first()).toBeVisible();
+
+    await page.locator('#ownershipFilter').selectOption('owned');
+    await expect(page.locator('#setsTable tbody tr').first()).toBeVisible();
+
+    await page.locator('#clearFiltersBtn').click();
+    await expect(page.locator('#searchInput')).toHaveValue('');
 
     await page.locator('#refreshBtn').click();
     await expect(page.locator('#refreshBtn')).toHaveText('Refresh valuations');
@@ -27,3 +34,16 @@ for (const viewport of [
     await context.close();
   });
 }
+
+test('BrickIQ print smoke', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(baseURL, { waitUntil: 'networkidle' });
+  await page.emulateMedia({ media: 'print' });
+
+  await expect(page.locator('.controls')).toBeHidden();
+  await expect(page.locator('#setsTable')).toBeVisible();
+
+  await page.screenshot({ path: 'test-results/print-smoke.png', fullPage: true });
+  await context.close();
+});

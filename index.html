@@ -17,7 +17,10 @@
               <p class="tagline">Collector intelligence cockpit · GBP valuation index</p>
             </div>
           </div>
-          <button id="refreshBtn" class="refresh-btn">Refresh valuations</button>
+          <div class="hero-actions">
+            <button id="printBtn" class="chip-btn">Print current view</button>
+            <button id="refreshBtn" class="refresh-btn">Refresh valuations</button>
+          </div>
         </div>
 
         <div class="meta-row">
@@ -56,12 +59,33 @@
         </article>
       </section>
 
+      <section class="theme-tiles-wrap" aria-labelledby="themeTilesTitle">
+        <div class="strip-head">
+          <h2 id="themeTilesTitle">Browse by theme</h2>
+          <p>Tap a tile for instant filtering</p>
+        </div>
+        <div id="themeTiles" class="theme-tiles" role="list"></div>
+      </section>
+
       <section class="controls" aria-label="Filters and search">
-        <input id="searchInput" type="search" placeholder="Search set #, name, theme..." />
-        <select id="filterSelect">
-          <option value="all">All sets</option>
-          <option value="estimated">Only rows with estimated values</option>
+        <input id="searchInput" type="search" placeholder="Search set #, name, theme, status, tags..." />
+        <select id="ownershipFilter">
+          <option value="all">All ownership</option>
+          <option value="owned">Owned</option>
+          <option value="wishlist">Wishlist</option>
         </select>
+        <select id="confidenceFilter">
+          <option value="all">All confidence</option>
+          <option value="exact">Non-estimated only</option>
+          <option value="estimated">Contains estimates</option>
+        </select>
+        <select id="valueBandFilter">
+          <option value="all">All value bands (NIB value)</option>
+          <option value="low">Under £200</option>
+          <option value="mid">£200 to £1000</option>
+          <option value="high">Over £1000</option>
+        </select>
+        <button id="clearFiltersBtn" class="chip-btn">Clear all</button>
       </section>
 
       <section class="content-grid">

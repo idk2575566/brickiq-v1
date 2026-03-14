@@ -12,6 +12,11 @@ const num = (v) => {
   return Number.isFinite(n) ? n : null;
 };
 
+const isTruthy = (v) => {
+  const s = String(v ?? '').trim().toLowerCase();
+  return s === '1' || s === 'true' || s === 'yes' || s === 'y' || s === 'x';
+};
+
 const mapped = rows.slice(1).map((row) => {
   const setNumber = get(row, 'Number');
   const variant = get(row, 'Variant');
@@ -19,6 +24,11 @@ const mapped = rows.slice(1).map((row) => {
 
   const qtyRaw = num(get(row, 'QtyOwned'));
   const qty = qtyRaw && qtyRaw > 0 ? qtyRaw : 1;
+
+  const qtyWanted = num(get(row, 'QtyWanted')) ?? 0;
+  const hasOwned = isTruthy(get(row, 'Own')) || qty > 0;
+  const hasWishlist = isTruthy(get(row, 'Want')) || qtyWanted > 0;
+  const ownershipStatus = hasOwned && hasWishlist ? 'both' : (hasOwned ? 'owned' : (hasWishlist ? 'wishlist' : 'unknown'));
 
   const nibRaw = num(get(row, 'BrickLinkSoldPriceNew'));
   const usedRaw = num(get(row, 'BrickLinkSoldPriceUsed'));
@@ -48,8 +58,13 @@ const mapped = rows.slice(1).map((row) => {
     setNumber: setCode || setNumber,
     name: get(row, 'SetName') || 'Unknown set',
     qty,
+    qtyWanted,
     theme: get(row, 'Theme'),
     subtheme: get(row, 'Subtheme'),
+    tags: [get(row, 'Category'), get(row, 'ThemeGroup'), get(row, 'Subtheme'), ownershipStatus].filter(Boolean),
+    ownershipStatus,
+    hasOwned,
+    hasWishlist,
     nibPriceGbp: +Number(nib).toFixed(2),
     usedPriceGbp: +Number(used).toFixed(2),
     rrpGbp: +Number(rrp).toFixed(2),
@@ -70,6 +85,7 @@ const output = {
   assumptions: [
     'Primary set number mapping: Number + Variant → setNumber (e.g., 6866-1).',
     'Primary quantity mapping: QtyOwned; defaults to 1 if missing/zero.',
+    'Ownership mapping: Own + QtyOwned => owned, Want + QtyWanted => wishlist (both allowed).',
     'NIB market price source: BrickLinkSoldPriceNew (GBP assumed from export context).',
     'Used market price source: BrickLinkSoldPriceUsed (GBP assumed from export context).',
     'RRP source priority: UKRetailPrice, fallback to USRetailPrice.',
@@ -88,11 +104,18 @@ const estimateStats = mapped.reduce((acc, r) => {
   return acc;
 }, { nib: 0, used: 0, rrp: 0 });
 
+const ownershipStats = mapped.reduce((acc, r) => {
+  acc[r.ownershipStatus] = (acc[r.ownershipStatus] || 0) + 1;
+  return acc;
+}, {});
+
 fs.writeFileSync('data/mapping-summary.json', JSON.stringify({
   headers,
   mappedCount: mapped.length,
-  estimateStats
+  estimateStats,
+  ownershipStats
 }, null, 2));
 
 console.log(`Built ${mapped.length} normalized rows`);
 console.log('Estimate stats:', estimateStats);
+console.log('Ownership stats:', ownershipStats);
