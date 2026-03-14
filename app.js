@@ -6,7 +6,6 @@ let state = {
   sortDir: 'desc',
   hasBrickEconomyData: false,
   hasBrickLinkData: false,
-  marketSource: 'auto',
   search: '',
   filters: {
     ownership: 'all',
@@ -81,29 +80,67 @@ function extractBrickLink(row) {
   };
 }
 
-function resolveMarket(be, bl) {
-  if (state.marketSource === 'brickeconomy') {
-    return be.available ? { unit: be.unit, total: be.total, source: 'BrickEconomy' } : { unit: null, total: null, source: 'BrickEconomy' };
+function resolveMarket(be, bl, fallbackUnit, qty) {
+  const fallback = toNumberOrNull(fallbackUnit);
+
+  if (be.available && bl.available) {
+    const unit = (be.unit + bl.unit) / 2;
+    return {
+      unit,
+      total: unit * qty,
+      source: 'BrickEconomy + BrickLink avg',
+      sourceDetails: ['BrickEconomy', 'BrickLink']
+    };
   }
-  if (state.marketSource === 'bricklink') {
-    return bl.available ? { unit: bl.unit, total: bl.total, source: 'BrickLink' } : { unit: null, total: null, source: 'BrickLink' };
+
+  if (be.available) {
+    return {
+      unit: be.unit,
+      total: be.total,
+      source: 'BrickEconomy',
+      sourceDetails: ['BrickEconomy']
+    };
   }
-  if (be.available) return { unit: be.unit, total: be.total, source: 'BrickEconomy' };
-  if (bl.available) return { unit: bl.unit, total: bl.total, source: 'BrickLink' };
-  return { unit: null, total: null, source: null };
+
+  if (bl.available) {
+    return {
+      unit: bl.unit,
+      total: bl.total,
+      source: 'BrickLink',
+      sourceDetails: ['BrickLink']
+    };
+  }
+
+  if (fallback != null) {
+    return {
+      unit: fallback,
+      total: fallback * qty,
+      source: 'Sheet fallback (current price)',
+      sourceDetails: ['Sheet fallback']
+    };
+  }
+
+  return { unit: null, total: null, source: null, sourceDetails: [] };
 }
 
 function valueRows(rows) {
   return rows.map((r) => {
+    const qty = toNumberOrNull(r.qty) || 0;
     const be = extractBrickEconomy(r);
     const bl = extractBrickLink(r);
-    const market = resolveMarket(be, bl);
+    const market = resolveMarket(be, bl, r.nibPriceGbp, qty);
+    const rrpValue = qty * r.rrpGbp;
+    const upliftAbsolute = (market.total ?? 0) - rrpValue;
+    const upliftPct = rrpValue > 0 && Number.isFinite(market.total) ? (upliftAbsolute / rrpValue) * 100 : null;
+
     return {
       ...r,
-      nibValue: r.qty * r.nibPriceGbp,
-      usedValue: r.qty * r.usedPriceGbp,
-      rrpValue: r.qty * r.rrpGbp,
-      delta: r.qty * (r.nibPriceGbp - r.rrpGbp),
+      nibValue: qty * r.nibPriceGbp,
+      usedValue: qty * r.usedPriceGbp,
+      rrpValue,
+      upliftAbsolute,
+      upliftPct,
+      delta: upliftAbsolute,
       hasBrickEconomy: be.available,
       hasBrickLink: bl.available,
       brickEconomyUnitGbp: be.unit,
@@ -112,6 +149,7 @@ function valueRows(rows) {
       brickLinkUnitGbp: bl.unit,
       brickLinkValue: bl.total,
       marketSource: market.source,
+      marketSourceDetails: market.sourceDetails,
       marketUnit: market.unit,
       marketValue: market.total
     };
@@ -119,6 +157,12 @@ function valueRows(rows) {
 }
 
 const total = (rows, key) => rows.reduce((sum, r) => sum + (r[key] || 0), 0);
+
+function formatUpliftIndicator(row) {
+  if (!Number.isFinite(row.upliftPct)) return '<span class="gain-flat">→ n/a</span>';
+  const up = row.upliftPct >= 0;
+  return `<span class="${up ? 'gain-up' : 'gain-down'}">${up ? '▲' : '▼'} ${Math.abs(row.upliftPct).toFixed(1)}%</span>`;
+}
 
 const imageUrlForSet = (setNumber) => `https://images.brickset.com/sets/images/${encodeURIComponent(setNumber)}.jpg`;
 
@@ -314,18 +358,18 @@ function resetPage() {
 }
 
 function renderKpis(rows) {
-  const nib = total(rows, 'nibValue');
-  const used = total(rows, 'usedValue');
+  const marketTotal = total(rows, 'marketValue');
   const rrp = total(rows, 'rrpValue');
-  const deltaNib = nib - rrp;
-  const deltaUsed = used - rrp;
+  const uplift = marketTotal - rrp;
+  const upliftPct = rrp > 0 ? (uplift / rrp) * 100 : null;
+  const themes = new Set(rows.map((r) => r.theme || 'Unknown')).size;
 
   const cards = [
-    ['Portfolio value (NIB)', GBP.format(nib), 'Boxed market estimate'],
-    ['Portfolio value (Used)', GBP.format(used), 'Opened market estimate'],
-    ['Portfolio value (RRP baseline)', GBP.format(rrp), 'Retail baseline'],
-    ['Delta vs RRP (NIB)', GBP.format(deltaNib), deltaNib >= 0 ? 'Ahead of baseline' : 'Below baseline'],
-    ['Delta vs RRP (Used)', GBP.format(deltaUsed), deltaUsed >= 0 ? 'Ahead of baseline' : 'Below baseline']
+    ['Total Secondary Market Value', GBP.format(marketTotal), 'Computed market unit × qty'],
+    ['Total uplift vs RRP', `${GBP.format(uplift)} ${Number.isFinite(upliftPct) ? `(${upliftPct >= 0 ? '+' : ''}${upliftPct.toFixed(1)}%)` : ''}`.trim(), uplift >= 0 ? 'Above retail baseline' : 'Below retail baseline'],
+    ['RRP baseline', GBP.format(rrp), 'Collection retail baseline'],
+    ['Sets in view', String(rows.length), 'Filtered results'],
+    ['Themes in view', String(themes), 'Theme filter updates this view']
   ];
 
   byId('kpis').innerHTML = cards.map(([label, value, sub]) => `
@@ -360,13 +404,13 @@ function renderConfidence(rows) {
 function renderThemeTiles() {
   const groups = state.rows.reduce((acc, row) => {
     const theme = row.theme || 'Unknown';
-    acc[theme] = acc[theme] || { theme, count: 0, nibValue: 0 };
+    acc[theme] = acc[theme] || { theme, count: 0, marketValue: 0 };
     acc[theme].count += 1;
-    acc[theme].nibValue += row.nibValue;
+    acc[theme].marketValue += row.marketValue || 0;
     return acc;
   }, {});
 
-  const tiles = [{ theme: 'all', count: state.rows.length, nibValue: total(state.rows, 'nibValue') }, ...Object.values(groups).sort((a, b) => b.count - a.count)];
+  const tiles = [{ theme: 'all', count: state.rows.length, marketValue: total(state.rows, 'marketValue') }, ...Object.values(groups).sort((a, b) => b.count - a.count)];
 
   byId('themeTiles').innerHTML = tiles.map((t) => {
     const active = state.filters.theme === t.theme;
@@ -378,7 +422,7 @@ function renderThemeTiles() {
           <strong>${label}</strong>
         </div>
         <span>${t.count} sets</span>
-        <em>${GBP.format(t.nibValue)}</em>
+        <em>${GBP.format(t.marketValue)}</em>
       </button>
     `;
   }).join('');
@@ -406,15 +450,7 @@ function renderMobileControls(rows) {
 
   const beHint = byId('mobileBrickEconomyHint');
   if (beHint) {
-    if (state.hasBrickEconomyData && state.hasBrickLinkData) {
-      beHint.textContent = `Auto uses BrickEconomy first, then BrickLink pilot (${state.marketSource}).`;
-    } else if (state.hasBrickEconomyData) {
-      beHint.textContent = 'BrickEconomy steering available';
-    } else if (state.hasBrickLinkData) {
-      beHint.textContent = 'BrickLink pilot steering available';
-    } else {
-      beHint.textContent = 'No steering source available in current snapshot';
-    }
+    beHint.textContent = 'Market unit uses BrickEconomy/BrickLink with sheet fallback.';
   }
 }
 
@@ -474,13 +510,16 @@ function renderTable(rows) {
           </div>
         </td>
         <td>${r.qty}</td>
-        <td>${r.hasBrickEconomy ? GBP.format(r.brickEconomyUnitGbp) : '—'}</td>
+        <td>${r.marketUnit != null ? GBP.format(r.marketUnit) : '—'}</td>
         <td>${GBP.format(r.usedPriceGbp)}</td>
         <td>${GBP.format(r.rrpGbp)}</td>
-        <td>${r.hasBrickEconomy ? GBP.format(r.brickEconomyValue) : '—'}</td>
+        <td>${r.marketValue != null ? GBP.format(r.marketValue) : '—'}</td>
         <td>${GBP.format(r.usedValue)}</td>
         <td>${GBP.format(r.rrpValue)}</td>
-        <td class="${r.delta >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(r.delta)}</td>
+        <td>
+          <div class="delta-stack ${r.upliftAbsolute >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(r.upliftAbsolute)}</div>
+          <div class="delta-pct">${formatUpliftIndicator(r)}</div>
+        </td>
         <td>${actionButtons(r)}</td>
       </tr>
     `;
@@ -496,8 +535,6 @@ function renderMobileCards(rows) {
     return;
   }
 
-  const beUnavailableLabel = '<span class="hint-muted">BrickEconomy price unavailable</span>';
-
   byId('mobileCards').innerHTML = rows.map((r) => {
     return `
     <article class="set-card" data-detail="${r.setNumber}" role="button" tabindex="0" aria-label="View details for ${r.name}">
@@ -512,10 +549,13 @@ function renderMobileCards(rows) {
             <img class="theme-badge" loading="lazy" decoding="async" src="${themeBadgeDataUrl(r.theme, true)}" alt="${r.theme || 'Theme'} badge" />
           </div>
           <div class="market-price-line">
-            <label>Current market price</label>
-            <p>${r.hasBrickEconomy ? GBP.format(r.brickEconomyUnitGbp) : '—'}</p>
+            <label>Market unit price</label>
+            <p>${r.marketUnit != null ? GBP.format(r.marketUnit) : '—'}</p>
           </div>
-          ${!r.hasBrickEconomy ? `<div class="market-alt-line">${beUnavailableLabel}</div>` : ""}
+          <div class="market-alt-line">
+            <span>${r.marketValue != null ? GBP.format(r.marketValue) : '—'} total</span>
+            ${formatUpliftIndicator(r)}
+          </div>
         </div>
       </div>
       ${actionButtons(r)}
@@ -560,7 +600,7 @@ function renderWatchlist() {
     .filter(Boolean);
 
   if (!list.length) {
-    renderEmptyState('watchlistBody', 'Watchlist is empty', 'Save key sets to monitor price momentum faster.');
+    renderEmptyState('watchlistBody', 'Watchlist is empty', 'Save key sets to track market value and uplift.');
     return;
   }
 
@@ -568,7 +608,7 @@ function renderWatchlist() {
     <div class="watch-item">
       <button class="watch-main" data-detail="${r.setNumber}">
         <strong>${r.name}</strong>
-        <span>Set ${r.setNumber} · ${r.hasBrickEconomy ? GBP.format(r.brickEconomyValue) : '—'}</span>
+        <span>Set ${r.setNumber} · ${r.marketValue != null ? GBP.format(r.marketValue) : '—'}</span>
       </button>
       <button class="chip-btn watch-btn is-on" data-watch="${r.setNumber}">Remove</button>
     </div>
@@ -648,17 +688,18 @@ function openDetail(setNumber) {
       </div>
       <div class="product-price">
         <p class="main">${row.marketValue != null ? GBP.format(row.marketValue) : '—'}</p>
-        <p class="sub">${row.marketSource || 'No source'} market value · Qty ${row.qty}</p>
+        <p class="sub">Computed market value · Qty ${row.qty}</p>
+        <p class="sub">${formatUpliftIndicator(row)} vs RRP</p>
       </div>
     </section>
 
     <section class="detail-grid">
       <div class="spec-tile"><label>Quantity</label><strong>${row.qty}</strong></div>
-      <div class="spec-tile"><label>Market unit (${row.marketSource || 'n/a'})</label><strong>${row.marketUnit != null ? GBP.format(row.marketUnit) : '—'}</strong></div>
+      <div class="spec-tile"><label>Market unit (computed)</label><strong>${row.marketUnit != null ? GBP.format(row.marketUnit) : '—'}</strong></div>
       <div class="spec-tile"><label>Used unit</label><strong>${GBP.format(row.usedPriceGbp)}</strong></div>
       <div class="spec-tile"><label>RRP unit</label><strong>${GBP.format(row.rrpGbp)}</strong></div>
-      <div class="spec-tile"><label>Market value (${row.marketSource || 'n/a'})</label><strong>${row.marketValue != null ? GBP.format(row.marketValue) : '—'}</strong></div>
-      <div class="spec-tile"><label>Delta vs RRP</label><strong class="${row.delta >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(row.delta)}</strong></div>
+      <div class="spec-tile"><label>Market value (computed)</label><strong>${row.marketValue != null ? GBP.format(row.marketValue) : '—'}</strong></div>
+      <div class="spec-tile"><label>Uplift vs RRP</label><strong class="${row.upliftAbsolute >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(row.upliftAbsolute)}</strong></div>
     </section>
     ${!state.hasBrickEconomyData && !state.hasBrickLinkData ? '<p class="detail-note">No external market steering values are present in the current data export.</p>' : ''}
   `;
@@ -673,7 +714,6 @@ function closeDetail() {
 function reRender() {
   const rows = filteredSortedRows();
   renderTable(rows);
-  renderGallery(rows);
   renderConfidence(rows);
   renderThemeTiles();
   renderMobileControls(state.rows);
@@ -689,7 +729,6 @@ function clearFilters() {
   byId('ownershipFilter').value = 'all';
   byId('confidenceFilter').value = 'all';
   byId('valueBandFilter').value = 'all';
-  byId('marketSourceFilter').value = state.marketSource;
   reRender();
 }
 
@@ -707,22 +746,18 @@ async function loadData() {
     const assumptionBadge = byId('assumptionBadge');
     if (assumptionBadge) {
       if (state.hasBrickEconomyData && state.hasBrickLinkData) {
-        assumptionBadge.textContent = 'BrickEconomy + BrickLink steering available.';
+        assumptionBadge.textContent = 'Using BrickEconomy + BrickLink average where both exist.';
       } else if (state.hasBrickEconomyData) {
-        assumptionBadge.textContent = 'BrickEconomy values available on supported rows.';
+        assumptionBadge.textContent = 'Using BrickEconomy where available.';
       } else if (state.hasBrickLinkData) {
-        assumptionBadge.textContent = 'BrickLink steering values available on pilot rows.';
+        assumptionBadge.textContent = 'Using BrickLink where available.';
       } else {
-        assumptionBadge.textContent = 'No external steering values in this snapshot.';
+        assumptionBadge.textContent = 'Using sheet fallback prices for market values.';
       }
     }
 
-    const marketSourceFilter = byId('marketSourceFilter');
-    if (marketSourceFilter) marketSourceFilter.value = state.marketSource;
-
     updateFreshness();
     reRender();
-    renderSnapshotChanges(state.rows);
     renderWatchlist();
   } finally {
     state.isLoading = false;
@@ -755,13 +790,6 @@ byId('valueBandFilter').addEventListener('change', (e) => {
 });
 
 byId('clearFiltersBtn').addEventListener('click', clearFilters);
-
-byId('marketSourceFilter')?.addEventListener('change', (e) => {
-  state.marketSource = e.target.value || 'auto';
-  state.rows = valueRows(state.rows);
-  resetPage();
-  reRender();
-});
 
 byId('mobileOwnershipFilter')?.addEventListener('change', (e) => {
   state.filters.ownership = e.target.value;

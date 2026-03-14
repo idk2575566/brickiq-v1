@@ -32,25 +32,13 @@
           <span id="freshness" class="badge"></span>
           <span class="badge subtle">Source: synced sheet snapshot</span>
           <span class="badge subtle">Refresh = latest index pull</span>
-          <span class="badge warn" id="assumptionBadge">BrickEconomy market pricing active</span>
+          <span class="badge warn" id="assumptionBadge">Computed market pricing active</span>
         </div>
       </header>
 
       <section class="kpi-grid" id="kpis"></section>
 
-      <section class="insight-strip" aria-labelledby="insightTitle">
-        <div class="strip-head">
-          <h2 id="insightTitle">Momentum story</h2>
-          <p>Top movers by NIB delta vs RRP</p>
-        </div>
-        <div id="galleryRail" class="gallery-rail"></div>
-      </section>
-
       <section class="snapshot-grid">
-        <article class="snapshot-card" aria-labelledby="changesTitle">
-          <h2 id="changesTitle">What changed since last snapshot</h2>
-          <div id="changesList" class="changes-list"></div>
-        </article>
         <article class="snapshot-card" aria-labelledby="confidenceTitle">
           <h2 id="confidenceTitle">Confidence at a glance</h2>
           <div id="confidenceBars" class="confidence-bars"></div>
@@ -83,11 +71,6 @@
           <option value="mid">£200 to £1000</option>
           <option value="high">Over £1000</option>
         </select>
-        <select id="marketSourceFilter">
-          <option value="auto">Market source: Auto</option>
-          <option value="brickeconomy">Market source: BrickEconomy</option>
-          <option value="bricklink">Market source: BrickLink pilot</option>
-        </select>
         <button id="clearFiltersBtn" class="chip-btn">Clear all</button>
       </section>
 
@@ -111,7 +94,7 @@
                   <th data-sort="marketValue">Market value</th>
                   <th data-sort="usedValue">Used value</th>
                   <th data-sort="rrpValue">RRP value</th>
-                  <th data-sort="delta">Δ vs RRP (NIB)</th>
+                  <th data-sort="upliftAbsolute">Uplift vs RRP</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -127,8 +110,6 @@
                 <option value="marketValue:asc">Sort: Market price low → high</option>
                 <option value="name:asc">Sort: Name A → Z</option>
                 <option value="name:desc">Sort: Name Z → A</option>
-                <option value="brickEconomyValue:desc">Sort: BrickEconomy high → low</option>
-                <option value="brickLinkValue:desc">Sort: BrickLink pilot high → low</option>
               </select>
               <select id="mobileThemeFilter">
                 <option value="all">All themes</option>
