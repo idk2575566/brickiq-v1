@@ -502,21 +502,33 @@ function openDetail(setNumber) {
 
   const fallback = placeholderImage(row.setNumber);
   byId('detailBody').innerHTML = `
-    <div class="detail-head">
+    <section class="product-hero">
       <img loading="lazy" decoding="async" src="${imageUrlForSet(row.setNumber)}" alt="${row.name}" onerror="this.onerror=null;this.src='${fallback}';" />
-      <div>
+    </section>
+
+    <section class="product-trust-row">
+      <div class="product-title">
         <h3>${row.name}</h3>
         <p>Set ${row.setNumber} · ${row.theme || 'Theme n/a'} · ${ownershipLabel(row)}</p>
+        <div class="trust-pills">
+          <span class="badge subtle">Data snapshot indexed</span>
+          <span class="badge ${isEstimatedRow(row) ? 'warn' : ''}">${isEstimatedRow(row) ? 'Contains estimate(s)' : 'Exact in-sheet pricing'}</span>
+        </div>
       </div>
-    </div>
-    <div class="detail-grid">
-      <div><label>Quantity</label><strong>${row.qty}</strong></div>
-      <div><label>NIB unit</label><strong>${GBP.format(row.nibPriceGbp)}</strong></div>
-      <div><label>Used unit</label><strong>${GBP.format(row.usedPriceGbp)}</strong></div>
-      <div><label>RRP unit</label><strong>${GBP.format(row.rrpGbp)}</strong></div>
-      <div><label>NIB value</label><strong>${GBP.format(row.nibValue)}</strong></div>
-      <div><label>Delta vs RRP</label><strong class="${row.delta >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(row.delta)}</strong></div>
-    </div>
+      <div class="product-price">
+        <p class="main">${GBP.format(row.nibValue)}</p>
+        <p class="sub">Portfolio NIB value · Qty ${row.qty}</p>
+      </div>
+    </section>
+
+    <section class="detail-grid">
+      <div class="spec-tile"><label>Quantity</label><strong>${row.qty}</strong></div>
+      <div class="spec-tile"><label>NIB unit</label><strong>${GBP.format(row.nibPriceGbp)}</strong></div>
+      <div class="spec-tile"><label>Used unit</label><strong>${GBP.format(row.usedPriceGbp)}</strong></div>
+      <div class="spec-tile"><label>RRP unit</label><strong>${GBP.format(row.rrpGbp)}</strong></div>
+      <div class="spec-tile"><label>NIB value</label><strong>${GBP.format(row.nibValue)}</strong></div>
+      <div class="spec-tile"><label>Delta vs RRP</label><strong class="${row.delta >= 0 ? 'delta-plus' : 'delta-minus'}">${GBP.format(row.delta)}</strong></div>
+    </section>
   `;
   byId('detailWatchBtn').textContent = isWatchlisted(setNumber) ? 'Remove from Watchlist' : 'Add to Watchlist';
   byId('detailDialog').showModal();
